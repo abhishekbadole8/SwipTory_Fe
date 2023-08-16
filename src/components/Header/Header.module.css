@@ -1,0 +1,53 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: .75rem 1.2rem .75rem 1.85rem;
+    font-family: 'DM Sans', sans-serif;
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.logo h4 {
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+
+.registerloginbtn div {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.registerloginbtn button {
+    cursor: pointer;
+    font-size: .9rem;
+    background-color: #FF7373;
+    font-weight: 700;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: .65rem 1.1rem;
+    display: flex;
+    gap: .13rem;
+    align-items: center;
+}
+
+#signinbtn {
+    background-color: #73ABFF;
+}
+
+.userimage {
+    max-width: 45px;
+}
+
+.hamburgerMenu {
+    display: flex;
+    flex-direction: column;
+    bottom: -175%;
+    right: 0;
+    padding: 1.5rem 2.75rem;
+    background-color: #fff;
+    position: absolute;
+    z-index: 99;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}

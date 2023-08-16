@@ -1,0 +1,28 @@
+.filter {
+    display: flex;
+    gap: 1.1rem;
+    overflow-x: hidden;
+}
+
+.filterTag {
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.filterTag img {
+    max-width: 165px;
+}
+
+.filterTag h2 {
+    color: #fff;
+    font-size: 700;
+    position: absolute;
+}
+
+.filterTagActive {
+    border: 4px solid #00ACD2;
+
+}
