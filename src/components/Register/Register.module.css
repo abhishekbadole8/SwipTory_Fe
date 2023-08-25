@@ -63,7 +63,12 @@
     color: red;
     border-radius: 50%;
     border: 3px solid red;
-    font-size: 1.30rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    padding: .35rem;
+    padding: .15rem .3rem;
+}
+
+.errorMsg {
+    margin: 0 auto;
+    color: #FF0E0E;
 }

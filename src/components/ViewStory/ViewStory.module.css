@@ -1,0 +1,173 @@
+.viewStory {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.viewStoryWrapper {
+    display: flex;
+    align-items: center;
+    gap: 11rem;
+}
+
+.viewPreviousStory,
+.viewNextStory {
+    cursor: pointer;
+}
+
+.viewStoryImageCont {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    /* background-color: #fff; */
+    box-shadow: 1px 1px 45px #414040;
+}
+
+.viewStoryInner {
+    /* padding: 1rem; */
+}
+
+.viewStoryInner img {
+    width: 305px;
+    height: 545px;
+}
+
+.viewStoryOuter {
+    /* margin: 1rem; */
+}
+
+/*---------- Shade ---------*/
+.shadeTop,
+.shadeBottom {
+    width: 100%;
+    height: 26%;
+    position: absolute;
+    background: linear-gradient(180deg, #000 58.26%, rgba(0, 0, 0, 0.00) 100%);
+}
+
+.shadeTop {
+    top: 0;
+}
+
+.shadeBottom {
+    transform: rotate(180deg);
+    bottom: 0;
+}
+
+/* --------------- */
+.viewStoryUpper {
+    width: 90%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 3%;
+    gap: 1rem;
+    margin: .35rem 1rem 0 1rem;
+}
+
+/* ---------- Bar----- */
+.storyBar {
+    display: flex;
+    gap: .6rem;
+}
+
+.storyBarWrapper {
+    position: relative;
+    display: flex;
+    border-radius: 25px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.barInner {
+    background-color: #D9D9D980;
+    width: 100%;
+    height: 4px;
+}
+
+.barOuter {    
+    height: 100%;
+    position: absolute;
+    border-radius: 25px;
+    background-color: #FFFFFF;
+}
+
+/* Share Story Button's */
+.sendStoryBtn {
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+}
+
+/* ------------ */
+.viewStoryBottom {
+    position: absolute;
+    bottom: 3%;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 0 1rem 0 1.15rem;
+}
+
+/* Content */
+.storyContent {
+    color: #fff;
+    margin-bottom: .5rem;
+}
+
+.storyContent h6 {
+    font-size: 1rem;
+    margin-bottom: .2rem;
+}
+
+.storyContent p {
+    font-size: .65rem;
+}
+
+/* Boomark and like */
+.bookmarkLikeBtn {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1.75rem;
+    width: 100%;
+}
+
+.bookmarkLikeBtn div {
+    display: flex;
+    align-items: center;
+    gap: .15rem;
+}
+
+.bookmarkLikeBtn span {
+    color: #fff;
+    font-size: .5rem;
+}
+
+/* icons */
+.viewPreviousStory,
+.viewNextStory {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#nextprevIcon {
+    font-size: 3.5rem;
+}
+
+#nextprevIcon:hover {
+    text-shadow: 0 0 40px #fff;
+}
+
+#icon {
+    cursor: pointer;
+}

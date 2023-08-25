@@ -1,26 +1,33 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import style from "./Login.module.css";
 
 function Login() {
-
     const { inputValue, setInputValue, BASE_USER_URL, setToken, loginModal, setLoginModal } = useContext(UserContext)
+    const [error, setError] = useState("");
 
     const fetchLogin = async () => {
         try {
             const response = await axios.post(BASE_USER_URL + '/login', {
                 ...inputValue
             })
+
             if (response) {
                 const token = await response.data.token
                 setToken(token)
                 localStorage.setItem('user_token_swiptory', token)
                 setLoginModal(!loginModal)
-                console.log('Logged In')
+                setInputValue("")
             }
         } catch (error) {
-            console.log(`Error In Fetch Login: ${error}`)
+            if (error.response.data.message) {
+                const errorMessage = error.response.data.message;
+                setError(errorMessage);
+            } else {
+                setError("An error occurred during login. Please try again.");
+                console.log("Error In Fetch Login:", error);
+            }
         }
     }
 
@@ -29,11 +36,32 @@ function Login() {
             { ...prevValue, [e.target.name]: e.target.value }
         ))
     }
+    
+    const handleError = () => {
+        let error_msg = ""
+        if (inputValue.username?.length <= 2) {
+            setError("Please add More letter to username")
+            error_msg = "Please add More letter to username"
+        }
+        if (inputValue.password.length < 4) {
+            setError("Password should be min 5 letters")
+            error_msg = "Password should be min 5 letters"
+        }
+        return error_msg
+    }
 
     const handelSubmit = (e) => {
         e.preventDefault();
-        fetchLogin()
+        setError("")
+        const error_msg = handleError();
+
+        if (error_msg) {
+            setError(error_msg)
+        } else {
+            fetchLogin()
+        }
     }
+
     return (
         <div className={style.authContainer}>
 
@@ -58,7 +86,7 @@ function Login() {
                             value={inputValue.password}
                             onChange={handleInput} />
                     </div>
-
+                    {error && <h5 className={style.errorMsg}>{error}</h5>}
                     <button type="submit" className={style.authSubmitBtn}>Login</button>
 
                 </form>
@@ -66,7 +94,7 @@ function Login() {
             </div>
 
             <div className={style.closebtn}>
-                <input type="button" value="X" />
+                <input type="button" value="X" onClick={() => setLoginModal(!loginModal)} />
             </div>
 
         </div>
