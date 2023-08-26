@@ -6,6 +6,10 @@
     position: relative;
 }
 
+.addStoryTitle {
+    display: none;
+}
+
 .slideWrapper {
     display: flex;
 }
@@ -52,7 +56,6 @@
     padding: .45rem .65rem;
     width: 53%;
 }
-
 
 .authSubmitBtn {
     margin-left: auto;
@@ -117,13 +120,85 @@
     font-weight: 600;
     padding: .15rem .3rem;
 }
-.noteTitle{
+
+.noteTitle {
     color: #474141;
     font-size: .55rem;
 }
-.errorTag{
+
+.errorTag {
     margin: auto;
     font-size: .95rem;
     font-weight: 700;
     color: #FF0E0E;
+}
+
+@media screen and (max-width:750px) {
+    .addStoryContainer {
+        padding: 1rem 1.35rem 1.75rem;
+    }
+
+    .addStoryTitle {
+        display: block;
+        text-align: center;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .slideWrapper {
+        width: 37%;
+        height: 100%;
+        flex-direction: column;
+        text-align: center;
+        gap: .25rem;
+    }
+
+    .slide {
+        padding: .85rem .5rem;
+    }
+
+    .addStoryContainerInner {
+        display: flex;
+        gap: 1.25rem;
+    }
+
+    .addStoryForm {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0;
+    }
+
+    .heading,
+    .description,
+    .image,
+    .category {
+        flex-direction: column;
+        gap: .35rem;
+        align-items: flex-start;
+    }
+
+    .heading input,
+    .description input,
+    .image input,
+    .category select {
+        width: 100%;
+        padding: .55rem .65rem;
+    }
+
+    .authSubmitBtn {
+        margin: auto;
+    }
+
+    .closebtn {
+        right: 1rem;
+    }
+
+    .noteTitle {
+        font-size: .5rem;
+    }
+
+    .prevnext {
+        display: none;
+    }
 }

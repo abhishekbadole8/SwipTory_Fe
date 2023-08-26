@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import axios from "axios";
 import style from "./Story.module.css";
 import { UserContext } from "../../App";
 import { TbEdit } from "react-icons/tb";
-import axios from "axios";
 
 function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
-    const location = useLocation()
 
-    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL, viewStoryModal } = useContext(UserContext)
 
     const [story, setStory] = useState([])
 
@@ -75,6 +73,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
                                     <p>{description}</p>
                                 </div>
                             </div>
+
                             <div className={style.editButton} onClick={(e) => handleEditButtonClick(e, individualStory)}>
                                 {userStory && <button><TbEdit size={18} />Edit</button>}
                             </div>
@@ -84,7 +83,9 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
             </div>
 
-            <button className={style.seemorebtn}>See more</button>
+            <button className={style.seemorebtn} >
+                See More
+            </button>
 
         </div >
     )

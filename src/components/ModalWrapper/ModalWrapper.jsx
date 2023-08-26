@@ -7,7 +7,7 @@ import AddStory from "../AddStory/AddStory";
 
 function ModalWrapper() {
 
-    const { loginModal, setLoginModal, registerModal, setRegisterModal, addStoryModal, setAddStoryModal } = useContext(UserContext)
+    const { loginModal, setLoginModal, registerModal, setRegisterModal, addStoryModal, setAddStoryModal, setIsEdit } = useContext(UserContext)
 
     const modalOutsideClick = useRef()
 
@@ -16,12 +16,13 @@ function ModalWrapper() {
             setLoginModal(false)
             setRegisterModal(false)
             setAddStoryModal(false)
+            setIsEdit(false)
         }
     }
     return (
         <div className={style.modalwrapper} >
             <div className={style.overlay} />
-            
+
             <div className={style.modalContent} ref={modalOutsideClick} onClick={handelModalOutsideClick}>
 
                 {loginModal && <Login />}

@@ -20,3 +20,17 @@
 .yStory {
     display: none;
 }
+
+@media screen and (max-width:750px) {
+    .homepage {
+        padding: 1rem;
+    }
+
+    .storyhead {
+        padding: 0;
+    }
+
+    .storytitle {
+        display: none;
+    }
+}

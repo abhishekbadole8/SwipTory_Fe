@@ -14,7 +14,8 @@
 
 .storyWrapper {
     display: flex;
-    gap: 2.25rem;
+    flex-wrap: wrap;
+    gap: 2.5rem;
 }
 
 /* If Bookmark is true */
@@ -111,4 +112,30 @@
     position: relative;
     display: flex;
     flex-direction: column;
+}
+
+@media screen and (max-width:750px) {
+    .storyContainer {
+        padding: 0;
+    }
+
+    .story {}
+
+    .storyWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .story img {
+        width: 100%;
+    }
+
+    .content {
+        margin-bottom: 1.75rem;
+    }
+
+    .seemorebtn {
+        display: none;
+    }
 }

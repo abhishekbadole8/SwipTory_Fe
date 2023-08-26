@@ -1,5 +1,10 @@
 import React, { useState, useEffect, createContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import style from "./App.module.css";
 import Homepage from "./pages/Homepage/Homepage";
 import Header from "./components/Header/Header";
@@ -12,7 +17,6 @@ import jwt_decode from "jwt-decode";
 export const UserContext = createContext();
 
 function App() {
-  
   const BASE_USER_URL = `https://swipstory.onrender.com/api/user`;
   const BASE_STORY_URL = `https://swipstory.onrender.com/api/story`;
   // const BASE_USER_URL = `http://localhost:5000/api/user`;
@@ -33,14 +37,11 @@ function App() {
   const [registerModal, setRegisterModal] = useState(false);
   const [addStoryModal, setAddStoryModal] = useState(false);
   const [viewStoryModal, setViewStoryModal] = useState(false);
-  const [editButton, setEditButton] = useState(false);
+
+  const [isEdit, setIsEdit] = useState(false); // Edit button
 
   const [selectedStoryCatArray, setSelectedStoryCatArray] = useState(); // selected story with category all stories in array of object's
   const [selectedStoryCatIndex, setSelectedStoryCatIndex] = useState(0); // selected story ( index ) with category all stories in array of object's
-
-  const [isCurrentStoryLiked, setIsCurrentStoryLiked] = useState(false); // Like button state
-  const [isCurrentStoryBookmarked, setIsCurrentStoryBookmarked] =
-    useState(false); // Like button state
 
   const [inputValue, setInputValue] = useState({ username: "", password: "" });
 
@@ -51,28 +52,27 @@ function App() {
     category: "",
     images: [],
   });
-  console.log(addStoryInputValue);
+
   // callbackfunction for getting edit btn story data
   const updateEditStoryInputValue = (newValues) => {
     setAddStoryInputValue((prevValues) => ({ ...prevValues, ...newValues }));
-    setEditButton(!editButton);
-  };
-
-  const fetchStory = async () => {
-    try {
-      const response = await axios.get(BASE_STORY_URL);
-      if (response) {
-        const data = response.data;
-        setAllUserStories(data);
-      }
-    } catch (error) {
-      console.log(`Error in Fetching story:${error}`);
-    }
+    setIsEdit(!isEdit);
   };
 
   useEffect(() => {
+    const fetchStory = async () => {
+      try {
+        const response = await axios.get(BASE_STORY_URL);
+        if (response) {
+          const data = response.data;
+          setAllUserStories(data);
+        }
+      } catch (error) {
+        console.log(`Error in Fetching story:${error}`);
+      }
+    };
     fetchStory();
-  }, [isCurrentStoryLiked]);
+  }, [viewStoryModal]);
 
   return (
     <div className={style.App}>
@@ -104,13 +104,9 @@ function App() {
           setAddStoryInputValue,
           filteredUserStories,
           setfilteredUserStories,
-          isCurrentStoryLiked,
-          setIsCurrentStoryLiked,
-          isCurrentStoryBookmarked,
-          setIsCurrentStoryBookmarked,
           updateEditStoryInputValue,
-          editButton,
-          setEditButton,
+          isEdit,
+          setIsEdit,
         }}
       >
         <Router>
@@ -118,7 +114,11 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Homepage />} />
             <Route exact index path="/homepage" element={<Homepage />} />
-            <Route exact path="/bookmark" element={<Bookmark />} />
+            <Route
+              exact
+              path="/bookmark"
+              element={token ? <Bookmark /> : <Navigate to={"/homepage"} />}
+            />
           </Routes>
           {loginModal && <ModalWrapper />}
           {registerModal && <ModalWrapper />}

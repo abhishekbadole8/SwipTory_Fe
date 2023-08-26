@@ -68,6 +68,42 @@
     padding: .15rem .3rem;
 }
 
-.errorMsg{
+.errorMsg {
     color: #FF0E0E;
+}
+
+@media screen and (max-width:750px) {
+    .authContainer {
+        padding: 1.75rem 4.5rem;
+    }
+
+    .authContainer h2 {
+        font-size: 1.35rem;
+    }
+
+    .authForm {
+        gap: 1.35rem;
+    }
+
+    .username,
+    .password {
+        font-size: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+    }
+
+    .username input,
+    .password input {
+        padding: .5rem .6rem;
+    }
+
+    .closebtn {
+        top: 1.25rem;
+        right: 1.25rem;
+    }
+
+    .authSubmitBtn {
+        margin-top: .5rem;
+    }
 }

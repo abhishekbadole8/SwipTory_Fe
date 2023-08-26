@@ -5,7 +5,7 @@ import axios from "axios";
 
 function AddStory() {
 
-    const { addStoryModal, setAddStoryModal, addStoryInputValue, setAddStoryInputValue, BASE_STORY_URL, headers, decode, editButton, setEditButton } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, addStoryInputValue, setAddStoryInputValue, BASE_STORY_URL, headers, decode, isEdit, setIsEdit } = useContext(UserContext)
 
     const [currentSlide, setCurrentSlide] = useState(1)
     const [error, setError] = useState('')
@@ -66,24 +66,24 @@ function AddStory() {
     const fetchAddStory = async () => {
         try {
             let response;
-            if (editButton == false) {
+            if (isEdit == false) {
                 response = await axios.post(BASE_STORY_URL + '/add', {
-                    ...addStoryInputValue
+                    ...addStoryInputValue,
                 }, headers)
             }
-            if (editButton == true) {
-                response = await axios.patch(BASE_STORY_URL + '/edit/' + decode?.user?._id +'/' +addStoryInputValue.storyId, {
+            if (isEdit == true) {
+                response = await axios.patch(BASE_STORY_URL + '/edit/' + decode?.user?._id + '/' + addStoryInputValue.storyId, {
                     category: addStoryInputValue.category,
                     description: addStoryInputValue.description,
                     heading: addStoryInputValue.heading,
-                    images: [...addStoryInputValue.images]
+                    images: [...addStoryInputValue.images],
+                    action: "updateInfoAndImage"
                 }, headers)
             }
             if (response) {
                 setAddStoryInputValue('')
                 setAddStoryModal(!addStoryModal)
-                setEditButton(false)
-                console.log(response)
+                setIsEdit(false)
             }
         } catch (error) {
             console.log(`Error In add story:${error}`)
@@ -104,7 +104,8 @@ function AddStory() {
 
     return (
         <div className={style.addStoryContainer}>
-
+            <h3 className={style.addStoryTitle}>Add story to feed</h3>
+            
             <div className={style.addStoryContainerInner}>
 
                 <div className={style.slideWrapper}>
@@ -174,6 +175,7 @@ function AddStory() {
             <div className={style.closebtn}>
                 <input type="button" value="X" onClick={() => {
                     setAddStoryModal(!addStoryModal)
+                    setIsEdit(false)
                     setAddStoryInputValue({
                         heading: '',
                         description: '',

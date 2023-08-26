@@ -91,7 +91,7 @@
     height: 4px;
 }
 
-.barOuter {    
+.barOuter {
     height: 100%;
     position: absolute;
     border-radius: 25px;
@@ -118,6 +118,7 @@
 /* Content */
 .storyContent {
     color: #fff;
+    margin-right: .25rem;
     margin-bottom: .5rem;
 }
 
@@ -170,4 +171,34 @@
 
 #icon {
     cursor: pointer;
+}
+
+@media screen and (max-width:750px) {
+
+    .viewPreviousStory,
+    .viewNextStory {
+        display: none;
+    }
+
+    .viewStoryImageCont {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .viewStoryInner img {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .storyContent h6 {
+        font-size: 1.1rem;
+    }
+
+    .storyContent p {
+        font-size: .75rem;
+    }
+
+    .bookmarkLikeBtn {
+        width: 70vw;
+    }
 }
