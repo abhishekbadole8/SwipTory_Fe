@@ -10,6 +10,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { LuSend } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
+import { useSwipeable } from 'react-swipeable';
 
 function ViewStory() {
 
@@ -22,6 +23,41 @@ function ViewStory() {
     const [currentStoryIndex, setCurrentStoryIndex] = useState(selectedStoryCatIndex);
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0) // image index save here
+    const handlers = useSwipeable({
+        onSwipedLeft: () => handleSwipeLeft(),
+        onSwipedRight: () => handleSwipeRight(),
+    });
+
+    const handleSwipeLeft = () => {
+        if (currentImageIndex < currentStory.images.length - 1) {
+            setCurrentImageIndex(currentImageIndex + 1);
+        } else {
+            goToNextStory();
+        }
+    };
+
+    const handleSwipeRight = () => {
+        if (currentImageIndex > 0) {
+            setCurrentImageIndex(currentImageIndex - 1);
+        } else {
+            goToPreviousStory();
+        }
+    };
+
+    const goToNextStory = () => {
+        const nextStoryIndex = (currentStoryIndex + 1) % selectedStoryCatArray.length;
+        setCurrentStoryAndImage(nextStoryIndex, 0);
+    };
+
+    const goToPreviousStory = () => {
+        const prevStoryIndex = currentStoryIndex === 0 ? selectedStoryCatArray.length - 1 : currentStoryIndex - 1;
+        setCurrentStoryAndImage(prevStoryIndex, selectedStoryCatArray[prevStoryIndex].images.length - 1);
+    };
+
+    const setCurrentStoryAndImage = (storyIndex, imageIndex) => {
+        setCurrentStoryIndex(storyIndex);
+        setCurrentImageIndex(imageIndex);
+    };
 
     // Current story object save here
     const currentStory = selectedStoryCatArray[currentStoryIndex]
@@ -43,6 +79,8 @@ function ViewStory() {
             setCurrentStoryIndex(prev => ((prev <= 0) ? 0 : prev) - 1)
         }
     };
+
+
 
     const fetchBookmarkOrLike = async (action) => {
         try {
@@ -66,7 +104,7 @@ function ViewStory() {
     return (
         <div className={style.viewStory}>
 
-            <div className={style.viewStoryWrapper}>
+            <div className={style.viewStoryWrapper} {...handlers}>
 
                 <div className={style.viewPreviousStory}>
                     <i className="fa-solid fa-chevron-left fa-2xl" id={style.nextprevIcon} style={{ color: "#fff" }} onClick={handlePreviousSlide}></i>
