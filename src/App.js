@@ -37,6 +37,7 @@ function App() {
   const [registerModal, setRegisterModal] = useState(false);
   const [addStoryModal, setAddStoryModal] = useState(false);
   const [viewStoryModal, setViewStoryModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isEdit, setIsEdit] = useState(false); // Edit button
 
@@ -72,7 +73,7 @@ function App() {
       }
     };
     fetchStory();
-  }, [viewStoryModal]);
+  }, [viewStoryModal, addStoryModal,BASE_STORY_URL]);
 
   return (
     <div className={style.App}>
@@ -94,6 +95,8 @@ function App() {
           setRegisterModal,
           addStoryModal,
           setAddStoryModal,
+          isLoading,
+          setIsLoading,
           viewStoryModal,
           setViewStoryModal,
           selectedStoryCatArray,

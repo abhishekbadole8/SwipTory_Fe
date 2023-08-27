@@ -5,14 +5,14 @@ import { UserContext } from "../../App";
 import style from "./ModalWrapper.module.css";
 import AddStory from "../AddStory/AddStory";
 
-function ModalWrapper() {
+function ModalWrapper() {    
 
     const { loginModal, setLoginModal, registerModal, setRegisterModal, addStoryModal, setAddStoryModal, setIsEdit } = useContext(UserContext)
 
     const modalOutsideClick = useRef()
 
     const handelModalOutsideClick = (e) => {
-        if (modalOutsideClick.current == e.target) {
+        if (modalOutsideClick.current === e.target) {
             setLoginModal(false)
             setRegisterModal(false)
             setAddStoryModal(false)

@@ -25,21 +25,12 @@
     border-radius: 20px;
     overflow: hidden;
     position: relative;
-    /* background-color: #fff; */
     box-shadow: 1px 1px 45px #414040;
-}
-
-.viewStoryInner {
-    /* padding: 1rem; */
 }
 
 .viewStoryInner img {
     width: 305px;
     height: 545px;
-}
-
-.viewStoryOuter {
-    /* margin: 1rem; */
 }
 
 /*---------- Shade ---------*/
@@ -92,8 +83,10 @@
 }
 
 .barOuter {
-    height: 100%;
-    position: absolute;
+    /* width: 100%; */
+    /* height: 100%; */
+    /* height: 4px; */
+    /* position: absolute; */
     border-radius: 25px;
     background-color: #FFFFFF;
 }

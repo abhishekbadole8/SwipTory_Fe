@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HiMenu } from "react-icons/hi";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { UserContext } from "../../App";
@@ -39,7 +39,7 @@ function Header() {
 
                             <button onClick={() => setAddStoryModal(!addStoryModal)}>Add Story</button>
 
-                            <img src={dp} alt="user-photo" className={style.userimage} />
+                            <img src={dp} alt="user" className={style.userimage} />
                         </div>
 
                         <HiMenu size={25} onClick={() => setHamburger(!hamburger)} style={{ cursor: "pointer" }} />
@@ -49,7 +49,7 @@ function Header() {
 
                                 <div className={style.menuProfile}>
                                     <div>
-                                        <img src={dp} alt="user-photo" className={style.userimage} />
+                                        <img src={dp} alt="user" className={style.userimage} />
                                         <h3>{decode.user.username}</h3>
                                         <RxCross2 size={25} onClick={() => setHamburger(!hamburger)} className={style.crossIcon} />
                                     </div>

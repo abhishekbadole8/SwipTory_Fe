@@ -6,7 +6,7 @@ import { TbEdit } from "react-icons/tb";
 
 function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
-    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL, viewStoryModal } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL } = useContext(UserContext)
 
     const [story, setStory] = useState([])
 

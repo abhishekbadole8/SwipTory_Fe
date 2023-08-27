@@ -1,11 +1,11 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import style from "./AddStory.module.css";
 import { UserContext } from "../../App";
 import axios from "axios";
 
 function AddStory() {
 
-    const { addStoryModal, setAddStoryModal, addStoryInputValue, setAddStoryInputValue, BASE_STORY_URL, headers, decode, isEdit, setIsEdit } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, addStoryInputValue, setAddStoryInputValue, BASE_STORY_URL, headers, decode, isEdit, setIsEdit, isLoading, setIsLoading } = useContext(UserContext)
 
     const [currentSlide, setCurrentSlide] = useState(1)
     const [error, setError] = useState('')
@@ -63,15 +63,16 @@ function AddStory() {
         }
         return ""
     }
+
     const fetchAddStory = async () => {
         try {
             let response;
-            if (isEdit == false) {
+            if (isEdit === false) {
                 response = await axios.post(BASE_STORY_URL + '/add', {
                     ...addStoryInputValue,
                 }, headers)
             }
-            if (isEdit == true) {
+            if (isEdit === true) {
                 response = await axios.patch(BASE_STORY_URL + '/edit/' + decode?.user?._id + '/' + addStoryInputValue.storyId, {
                     category: addStoryInputValue.category,
                     description: addStoryInputValue.description,
@@ -84,40 +85,49 @@ function AddStory() {
                 setAddStoryInputValue('')
                 setAddStoryModal(!addStoryModal)
                 setIsEdit(false)
+                setIsLoading(false)
             }
         } catch (error) {
-            console.log(`Error In add story:${error}`)
+            setIsLoading(false)
+            if (error.response.data.message) {
+                const errorMessage = error.response.data.message;
+                setError(errorMessage);
+            } else {
+                setError("An error occurred during Story add. Please try again.");
+                console.log("Error In Add Story:", error);
+            }
         }
     }
 
-    const handleAddStorySubmit = (e) => {
+    const handleAddStorySubmit = async (e) => {
         e.preventDefault()
         let error_msg = handleError()
 
         if (error_msg) {
             setError(error_msg)
         } else {
+            setIsLoading(true)
             setError(""); // Clear any previous error message
-            fetchAddStory()
+            await fetchAddStory()
         }
     }
 
     return (
         <div className={style.addStoryContainer}>
             <h3 className={style.addStoryTitle}>Add story to feed</h3>
-            
+
             <div className={style.addStoryContainerInner}>
 
                 <div className={style.slideWrapper}>
 
                     {addStoryInputValue.images?.length === 0 && (
-                        <div className={`${style.slide} ${currentSlide == 1 && style.slideActive}`} >
+                        <div className={`${style.slide} ${currentSlide === 1 && style.slideActive}`} >
                             <h4>Slide 1</h4>
                         </div>
                     )}
 
                     {addStoryInputValue.images?.map((imageUrl, index) => (
-                        <div key={index} className={`${style.slide} ${currentSlide - 1 == index && style.slideActive}`} onClick={() => setCurrentSlide(index + 1)}>
+                        <div key={index} className={`${style.slide} ${currentSlide - 1 === index && style.slideActive}`} onClick={() => setCurrentSlide(index + 1)}>
                             <h4>Slide {index + 1}</h4>
                         </div>
                     ))}
@@ -151,15 +161,20 @@ function AddStory() {
                         <label htmlFor="category">Category :</label>
 
                         <select name="category" onChange={handleAddStoryInput}>
-                            <option >Select Category</option>
+                            <option>Select Category</option>
                             <option value="food" >Food</option>
                             <option value="music">Music</option>
+                            <option value="nature">Nature</option>
+                            <option value="car">Car</option>
+                            <option value="flowers">Flower</option>
+                            <option value="anime">Anime</option>
                         </select>
                     </div>
 
                     {error && <p className={style.errorTag}>{error}</p>}
 
-                    <button type="submit" className={style.authSubmitBtn}>Post</button>
+                    <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`} disabled={isLoading}>
+                        {isLoading ? <p className={style.loadingSpinner}></p> : "Post"}</button>
                 </form>
 
                 <div className={style.prevnext}>

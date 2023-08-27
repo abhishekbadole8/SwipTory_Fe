@@ -3,7 +3,6 @@ import style from "./Bookmark.module.css";
 import Story from "../../components/Story/Story";
 import { UserContext } from "../../App";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 
 function Bookmark() {
     const location = useLocation()
@@ -21,7 +20,7 @@ function Bookmark() {
     }
 
     useEffect(() => {
-        if (location.pathname == '/bookmark') {
+        if (location.pathname === '/bookmark') {
             setBookmark(!bookmark)
         }
     }, [location.pathname])

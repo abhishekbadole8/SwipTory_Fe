@@ -69,6 +69,29 @@
     background-color: #FF7373;
 }
 
+.authSubmitBtnDisable {
+    background-color: #9bbdf0;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingSpinner {
+    width: 18px;
+    height: 18px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #383636;
+    border-radius: 50%;
+    animation: spinner 1.5s linear infinite;
+}
+
 .prevnext {
     padding: 0 1rem;
     display: flex;

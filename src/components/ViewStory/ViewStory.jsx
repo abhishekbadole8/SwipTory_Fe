@@ -2,11 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import style from "./ViewStory.module.css";
-import { GrFormPrevious } from "react-icons/gr";
-import { GrFormNext } from "react-icons/gr";
-import { FcNext } from "react-icons/fc";
 import { BsFillBookmarkFill } from "react-icons/bs";
-import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { LuSend } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
@@ -14,35 +10,16 @@ import { useSwipeable } from 'react-swipeable';
 
 function ViewStory() {
 
-    const { token, loginModal, setLoginModal, viewStoryModal, setViewStoryModal, selectedStoryCatArray, setSelectedStoryCatArray, selectedStoryCatIndex,
-        BASE_STORY_URL, headers, isLiked, setIsLiked, decode } = useContext(UserContext)
+    const { token, loginModal, setLoginModal, viewStoryModal, setViewStoryModal, selectedStoryCatArray,
+        setSelectedStoryCatArray, selectedStoryCatIndex, BASE_STORY_URL, headers, decode } = useContext(UserContext)
+    const [progess, setProgress] = useState(0)
 
-    // selectedStoryCatArray is array of object's and each obj is story of that particular category
-
-    // selectedStoryCatIndex is clicked story index
     const [currentStoryIndex, setCurrentStoryIndex] = useState(selectedStoryCatIndex);
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0) // image index save here
-    const handlers = useSwipeable({
-        onSwipedLeft: () => handleSwipeLeft(),
-        onSwipedRight: () => handleSwipeRight(),
-    });
 
-    const handleSwipeLeft = () => {
-        if (currentImageIndex < currentStory.images.length - 1) {
-            setCurrentImageIndex(currentImageIndex + 1);
-        } else {
-            goToNextStory();
-        }
-    };
-
-    const handleSwipeRight = () => {
-        if (currentImageIndex > 0) {
-            setCurrentImageIndex(currentImageIndex - 1);
-        } else {
-            goToPreviousStory();
-        }
-    };
+    // Current story object save here
+    const currentStory = selectedStoryCatArray[currentStoryIndex]
 
     const goToNextStory = () => {
         const nextStoryIndex = (currentStoryIndex + 1) % selectedStoryCatArray.length;
@@ -59,28 +36,44 @@ function ViewStory() {
         setCurrentImageIndex(imageIndex);
     };
 
-    // Current story object save here
-    const currentStory = selectedStoryCatArray[currentStoryIndex]
+    // Previous button logic
+    const handlePrevious = () => {
+        if (currentImageIndex > 0) {
+            setCurrentImageIndex(currentImageIndex - 1);
+        } else {
+            if (currentStoryIndex > 0) {
+                goToPreviousStory();
+            }
+        }
+    };
 
-    const handleNextSlide = () => {
+    // Next button logic
+    const handleNext = () => {
         if (currentImageIndex < currentStory.images.length - 1) {
-            setCurrentImageIndex(prev => prev + 1)
+            setCurrentImageIndex(currentImageIndex + 1);
         } else {
-            setCurrentStoryIndex(prev => prev + 1)
-            setCurrentImageIndex(0)
+            if (currentStoryIndex < selectedStoryCatArray.length - 1) {
+                goToNextStory();
+            }
         }
     };
 
-    // Pending Work
-    const handlePreviousSlide = () => {
-        if (currentImageIndex + 1 < currentStory.images.length) {
-            setCurrentImageIndex(prev => ((prev <= 0) ? 0 : prev) - 1)
-        } else {
-            setCurrentStoryIndex(prev => ((prev <= 0) ? 0 : prev) - 1)
-        }
-    };
-
-
+    const handlers = useSwipeable({
+        onSwipedLeft: () => {
+            if (currentImageIndex < currentStory.images.length - 1) {
+                setCurrentImageIndex(currentImageIndex + 1);
+            } else if (currentStoryIndex < selectedStoryCatArray.length - 1) {
+                handleNext();
+            }
+        },
+        onSwipedRight: () => {
+            if (currentImageIndex > 0) {
+                setCurrentImageIndex(currentImageIndex - 1);
+            } else if (currentStoryIndex > 0) {
+                handlePrevious();
+            }
+        },
+    });
 
     const fetchBookmarkOrLike = async (action) => {
         try {
@@ -101,13 +94,45 @@ function ViewStory() {
         }
     }
 
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: currentStory.heading,
+                    text: currentStory.description,
+                    url: currentStory.images[currentImageIndex]
+                });
+                console.log("Shared successfully");
+            } catch (error) {
+                console.error("Error sharing:", error);
+            }
+        } else {
+            console.log("Error in share");
+        }
+    };
+
+    // SetInterval for auto chnage slide
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress(prev => {
+                if (prev === 99) {
+                    handleNext()
+                    return 0;
+                } else {
+                    return prev + 1
+                }
+            })
+        }, 75);
+        return () => clearInterval(interval)
+    }, [currentImageIndex])
+
     return (
         <div className={style.viewStory}>
 
             <div className={style.viewStoryWrapper} {...handlers}>
 
                 <div className={style.viewPreviousStory}>
-                    <i className="fa-solid fa-chevron-left fa-2xl" id={style.nextprevIcon} style={{ color: "#fff" }} onClick={handlePreviousSlide}></i>
+                    <i className="fa-solid fa-chevron-left fa-2xl" id={style.nextprevIcon} style={{ color: "#fff" }} onClick={handlePrevious}></i>
                 </div>
 
                 <div className={style.viewStoryImageCont}>
@@ -126,8 +151,9 @@ function ViewStory() {
                                 {currentStory.images.map((_, i) => {
                                     return (
                                         <div className={style.storyBarWrapper} key={i} >
-                                            <div className={style.barInner} />
-                                            <div className={style.barOuter} />
+                                            {/* <div className={style.barInner} />
+                                            <div className={style.barOuter} /> */}
+                                            <div className={`${style.barInner}  ${!(i < currentImageIndex + 1) ? style.barInner : style.barOuter}`} />
                                         </div>
                                     )
                                 })}
@@ -135,7 +161,7 @@ function ViewStory() {
 
                             <div className={style.sendStoryBtn}>
                                 <RxCross2 color="white" id={style.icon} size={24} onClick={() => setViewStoryModal(!viewStoryModal)} />
-                                <LuSend color="white" id={style.icon} size={22} />
+                                <LuSend color="white" id={style.icon} size={22} onClick={handleShare} />
                             </div>
 
                         </div>
@@ -178,7 +204,7 @@ function ViewStory() {
                 </div>
 
                 <div className={style.viewNextStory}>
-                    <i className="fa-solid fa-chevron-right fa-2xl" id={style.nextprevIcon} style={{ color: "#fff" }} onClick={handleNextSlide}></i>
+                    <i className="fa-solid fa-chevron-right fa-2xl" id={style.nextprevIcon} style={{ color: "#fff" }} onClick={handleNext}></i>
                 </div>
 
             </div>

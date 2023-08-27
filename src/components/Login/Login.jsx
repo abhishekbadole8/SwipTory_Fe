@@ -4,7 +4,7 @@ import axios from "axios";
 import style from "./Login.module.css";
 
 function Login() {
-    const { inputValue, setInputValue, BASE_USER_URL, setToken, loginModal, setLoginModal } = useContext(UserContext)
+    const { inputValue, setInputValue, BASE_USER_URL, setToken, loginModal, setLoginModal, isLoading, setIsLoading } = useContext(UserContext)
     const [error, setError] = useState("");
 
     const fetchLogin = async () => {
@@ -19,12 +19,15 @@ function Login() {
                 localStorage.setItem('user_token_swiptory', token)
                 setLoginModal(!loginModal)
                 setInputValue("")
+                setIsLoading(false)
             }
         } catch (error) {
+            setIsLoading(false)
             if (error.response.data.message) {
                 const errorMessage = error.response.data.message;
                 setError(errorMessage);
             } else {
+
                 setError("An error occurred during login. Please try again.");
                 console.log("Error In Fetch Login:", error);
             }
@@ -36,7 +39,7 @@ function Login() {
             { ...prevValue, [e.target.name]: e.target.value }
         ))
     }
-    
+
     const handleError = () => {
         let error_msg = ""
         if (inputValue.username?.length <= 2) {
@@ -50,15 +53,15 @@ function Login() {
         return error_msg
     }
 
-    const handelSubmit = (e) => {
+    const handelSubmit = async (e) => {
         e.preventDefault();
         setError("")
         const error_msg = handleError();
-
         if (error_msg) {
             setError(error_msg)
         } else {
-            fetchLogin()
+            setIsLoading(true)
+            await fetchLogin()
         }
     }
 
@@ -86,8 +89,12 @@ function Login() {
                             value={inputValue.password}
                             onChange={handleInput} />
                     </div>
+
                     {error && <h5 className={style.errorMsg}>{error}</h5>}
-                    <button type="submit" className={style.authSubmitBtn}>Login</button>
+
+                    <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`} disabled={isLoading}>
+                        {isLoading ? <p className={style.loadingSpinner}></p> : "Login"}
+                    </button>
 
                 </form>
 
@@ -97,7 +104,7 @@ function Login() {
                 <input type="button" value="X" onClick={() => setLoginModal(!loginModal)} />
             </div>
 
-        </div>
+        </div >
     )
 }
 

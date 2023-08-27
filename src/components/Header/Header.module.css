@@ -88,6 +88,15 @@
         padding: 1rem 0;
     }
 
+    .registerloginbtn div {
+        gap: .5rem;
+    }
+
+    .registerloginbtn button {
+        padding: .45rem .75rem;
+        border-radius: 11px;
+    }
+
     .hamburgerMenu #menuList {
         display: flex;
         flex-direction: column;

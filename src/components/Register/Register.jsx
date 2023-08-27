@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import style from "./Register.module.css";
 
 function Register() {
 
-    const { inputValue, setInputValue, BASE_USER_URL, registerModal, setRegisterModal } = useContext(UserContext)
+    const { inputValue, setInputValue, BASE_USER_URL, registerModal, setRegisterModal, isLoading, setIsLoading } = useContext(UserContext)
 
     const [error, setError] = useState("");
 
@@ -16,9 +16,12 @@ function Register() {
             })
             if (response) {
                 const data = response.data
+                console.log(data);
                 setInputValue("")
+                setIsLoading(false)
             }
         } catch (error) {
+            setIsLoading(false)
             if (error.response.data.message) {
                 const errorMessage = error.response.data.message;
                 setError(errorMessage);
@@ -48,7 +51,7 @@ function Register() {
         return error_msg
     }
 
-    const handelSubmit = (e) => {
+    const handelSubmit = async (e) => {
         e.preventDefault();
         setError("")
         const error_msg = handleError();
@@ -56,11 +59,12 @@ function Register() {
         if (error_msg) {
             setError(error_msg)
         } else {
-            fetchRegister()          
+            setIsLoading(true)
+            await fetchRegister()
         }
 
     }
-    
+
 
     return (
         <div className={style.authContainer}>
@@ -88,7 +92,9 @@ function Register() {
                     </div>
                     {error && <h5 className={style.errorMsg}>{error}</h5>}
 
-                    <button type="submit" className={style.authSubmitBtn}>Register</button>
+                    <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`} disabled={isLoading}>
+                        {isLoading ? <p className={style.loadingSpinner}></p> : "Register"}
+                    </button>
                 </form>
 
             </div>
