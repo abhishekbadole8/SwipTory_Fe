@@ -5,7 +5,7 @@ import style from "./Register.module.css";
 
 function Register() {
 
-    const { inputValue, setInputValue, BASE_USER_URL, registerModal, setRegisterModal, isLoading, setIsLoading } = useContext(UserContext)
+    const { inputValue, setInputValue, BASE_USER_URL, registerModal, setRegisterModal, isLoading, setIsLoading,setLoginModal } = useContext(UserContext)
 
     const [error, setError] = useState("");
 
@@ -15,10 +15,10 @@ function Register() {
                 ...inputValue
             })
             if (response) {
-                const data = response.data
-                console.log(data);
                 setInputValue("")
                 setIsLoading(false)
+                setRegisterModal(false)
+                setLoginModal(true)
             }
         } catch (error) {
             setIsLoading(false)
