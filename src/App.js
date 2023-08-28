@@ -22,11 +22,10 @@ function App() {
   // const BASE_USER_URL = `http://localhost:5000/api/user`;
   // const BASE_STORY_URL = `http://localhost:5000/api/story`;
 
-  const [token, setToken] = useState(
-    localStorage.getItem("user_token_swiptory")
-  );
+  const [token, setToken] = useState("");
+  const [decode, setDecode] = useState('');
 
-  const decode = token && jwt_decode(token);
+  //const decode = token && jwt_decode(token);
 
   const headers = { headers: { Authorization: token } };
 
@@ -47,14 +46,13 @@ function App() {
   const [inputValue, setInputValue] = useState({ username: "", password: "" });
 
   const [addStoryInputValue, setAddStoryInputValue] = useState({
-    userId: decode?.user?._id,
+    // userId: decode?._id,
     heading: "",
     description: "",
     category: "",
     images: [],
   });
-
-  // callbackfunction for getting edit btn story data
+  
   const updateEditStoryInputValue = (newValues) => {
     setAddStoryInputValue((prevValues) => ({ ...prevValues, ...newValues }));
     setIsEdit(!isEdit);
@@ -73,7 +71,16 @@ function App() {
       }
     };
     fetchStory();
-  }, [viewStoryModal, addStoryModal,BASE_STORY_URL]);
+  }, [viewStoryModal, addStoryModal, BASE_STORY_URL]);
+
+  useEffect(() => {
+    const existingToken = localStorage.getItem("user_token_swiptory");
+    if (existingToken) {
+      const decodedToken = jwt_decode(existingToken);
+      setToken(existingToken);
+      setDecode(decodedToken);
+    }
+  }, []);
 
   return (
     <div className={style.App}>

@@ -69,6 +69,7 @@ function AddStory() {
             let response;
             if (isEdit === false) {
                 response = await axios.post(BASE_STORY_URL + '/add', {
+                    userId: decode.user._id,
                     ...addStoryInputValue,
                 }, headers)
             }
