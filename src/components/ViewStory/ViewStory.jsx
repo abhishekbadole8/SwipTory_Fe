@@ -111,7 +111,7 @@ function ViewStory() {
         }
     };
 
-    // SetInterval for auto chnage slide
+    //SetInterval for auto chnage slide
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress(prev => {
@@ -200,6 +200,7 @@ function ViewStory() {
 
                             </div>
                         </div>
+
                     </div>
                 </div>
 

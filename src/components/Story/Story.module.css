@@ -15,7 +15,7 @@
 .storyWrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: 2.5rem;
+    gap: 2.1rem;
 }
 
 /* If Bookmark is true */
@@ -118,8 +118,6 @@
     .storyContainer {
         padding: 0;
     }
-
-    .story {}
 
     .storyWrapper {
         display: flex;

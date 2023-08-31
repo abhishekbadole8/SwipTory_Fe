@@ -83,7 +83,7 @@ function Login() {
 
                     <div className={style.password}>
                         <label htmlFor="password">Password</label>
-                        <input type="text"
+                        <input type="password"
                             placeholder="Enter password"
                             name="password"
                             value={inputValue.password}
@@ -101,7 +101,10 @@ function Login() {
             </div>
 
             <div className={style.closebtn}>
-                <input type="button" value="X" onClick={() => setLoginModal(!loginModal)} />
+                <input type="button" value="X" onClick={() => {
+                    setLoginModal(!loginModal)
+                    setInputValue({ username: "", password: "" })
+                }} />
             </div>
 
         </div >

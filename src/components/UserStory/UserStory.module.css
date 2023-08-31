@@ -1,9 +1,3 @@
-.homepage {
-    padding: 1.35rem 2.75rem;
-    font-family: 'DM Sans', sans-serif;
-    text-align: center;
-}
-
 .storyhead {
     padding: 2.15rem 0 1.25rem 0;
 }
@@ -12,7 +6,6 @@
     font-size: 1.6rem;
     font-weight: 700;
 }
-
 
 .div {
     display: none;

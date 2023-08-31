@@ -23,7 +23,7 @@ function App() {
   // const BASE_STORY_URL = `http://localhost:5000/api/story`;
 
   const [token, setToken] = useState("");
-  const [decode, setDecode] = useState('');
+  const [decode, setDecode] = useState({});
 
   //const decode = token && jwt_decode(token);
 
@@ -46,18 +46,19 @@ function App() {
   const [inputValue, setInputValue] = useState({ username: "", password: "" });
 
   const [addStoryInputValue, setAddStoryInputValue] = useState({
-    // userId: decode?._id,
     heading: "",
     description: "",
     category: "",
     images: [],
   });
-  
+
+  // function for updating values - on edit btn click
   const updateEditStoryInputValue = (newValues) => {
     setAddStoryInputValue((prevValues) => ({ ...prevValues, ...newValues }));
     setIsEdit(!isEdit);
   };
 
+  // fetch story
   useEffect(() => {
     const fetchStory = async () => {
       try {
@@ -73,14 +74,21 @@ function App() {
     fetchStory();
   }, [viewStoryModal, addStoryModal, BASE_STORY_URL]);
 
+  // If localstorage has already token
   useEffect(() => {
-    const existingToken = localStorage.getItem("user_token_swiptory");
-    if (existingToken) {
-      const decodedToken = jwt_decode(existingToken);
-      setToken(existingToken);
-      setDecode(decodedToken);
+    const storedToken = localStorage.getItem("user_token_swiptory");
+    if (storedToken) {
+      setToken(storedToken);
     }
   }, []);
+
+  // seting decoded user
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      setDecode(decodedToken);
+    }
+  }, [token]);
 
   return (
     <div className={style.App}>
@@ -94,6 +102,7 @@ function App() {
           token,
           setToken,
           decode,
+          setDecode,
           allUserStories,
           setAllUserStories,
           loginModal,

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import style from "./Story.module.css";
 import { UserContext } from "../../App";
@@ -6,9 +6,16 @@ import { TbEdit } from "react-icons/tb";
 
 function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
+    const storyWrapperRef = useRef()
+
     const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL } = useContext(UserContext)
 
     const [story, setStory] = useState([])
+
+    const [visibleStory, setVisibleStory] = useState(5) // stories to visible
+    const [storyWrapperWidth, setStoryWrapperWidth] = useState(0)
+    const storyWidth = 201;
+    const gap = 33.6
 
     const handleEditButtonClick = (e, singleStory) => {
         e.stopPropagation()
@@ -22,6 +29,11 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
         setAddStoryModal(!addStoryModal)
     }
 
+    const showMoreStories = () => {
+        setVisibleStory(prevVisible => prevVisible + prevVisible)
+    }
+
+    // for story fetching  are per category
     useEffect(() => {
         const fetchStoryCategoryWise = async () => {
             try {
@@ -48,7 +60,31 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
             }
         }
         fetchStoryCategoryWise()
-    }, [category, userStory, BASE_STORY_URL, bookmark])
+    }, [category, userStory, BASE_STORY_URL, bookmark, addStoryModal])
+
+    // calculate total width of wrapper continer
+    useEffect(() => {
+        const handleResize = () => {
+            const newStoryWrapperrWidth = storyWrapperRef.current.offsetWidth;
+            setStoryWrapperWidth(newStoryWrapperrWidth);
+        }
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [])
+
+    //set visiblestory no. to display
+    useEffect(() => {
+        const calculateVisibleStories = () => {
+            if (storyWrapperWidth > 0) {
+                const availableWidth = storyWrapperWidth - gap;
+                const maxVisibleStories = Math.floor(availableWidth / (storyWidth))
+                setVisibleStory(Math.min(maxVisibleStories, story.length))
+            }
+        }
+        calculateVisibleStories()
+    }, [storyWrapperWidth, story])
 
     return (
 
@@ -56,13 +92,13 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
             <h4>{bookmark && 'Your Bookmark'}</h4>
 
-            <div className={`${bookmark ? style.bookmarkStoryWrapper : style.storyWrapper} `} >
+            <div className={`${bookmark ? style.bookmarkStoryWrapper : style.storyWrapper} `} ref={storyWrapperRef}>
 
-                {story?.map((individualStory, index) => {
+                {story?.slice(0, visibleStory).map((individualStory, index) => {
                     const { _id, images, heading, description } = individualStory;
 
                     return (
-                        <div className={style.parentDiv}>
+                        <div className={style.parentDiv} key={_id}>
                             <div className={style.story} key={_id} onClick={() => onClick(story, index)}>
                                 <div className={style.shadeTop} />
                                 <img src={images[0]} alt="story" />
@@ -83,9 +119,11 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
             </div>
 
-            <button className={style.seemorebtn} >
-                See More
-            </button>
+            {visibleStory < story?.length && (
+                <button className={style.seemorebtn} onClick={showMoreStories}>
+                    See More
+                </button>
+            )}
 
         </div >
     )

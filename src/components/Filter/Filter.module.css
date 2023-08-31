@@ -1,6 +1,6 @@
 .filter {
     display: flex;
-    gap: 1.1rem;
+    gap: 1.2rem;
     overflow: auto;
     white-space: nowrap;
     font-family: 'DM Sans', sans-serif;
@@ -12,15 +12,26 @@
 
 .filterTag {
     cursor: pointer;
-    /* border-radius: 30px; */
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    border-radius: 30px;
+
+}
+
+.filterTagBack {
+    border-radius: 30px;
+    background-color: rgb(236, 231, 231);
+}
+
+.filterTagBack img {
+    max-width: 160px;
+    opacity: 0;
 }
 
 .filterTag img {
-    max-width: 165px;    
+    max-width: 160px;
     border-radius: 30px;
 }
 
@@ -50,6 +61,16 @@
         max-width: 65px;
         height: auto;
         border-radius: 20px;
+    }
+
+    .filterTagBack {
+        border-radius: 20px;
+        background-color: rgb(236, 231, 231);
+    }
+
+    .filterTagBack img {
+        max-width: 65px;
+        opacity: 0;
     }
 
     .filterTag h2 {

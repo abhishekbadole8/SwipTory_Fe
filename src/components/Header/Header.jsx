@@ -10,16 +10,17 @@ import { RxCross2 } from "react-icons/rx";
 function Header() {
     const navigate = useNavigate()
 
-    const { token, setToken, decode, registerModal, setRegisterModal, loginModal, setLoginModal, addStoryModal, setAddStoryModal, } = useContext(UserContext)
+    const { token, setToken, decode, setDecode, registerModal, setRegisterModal, loginModal, setLoginModal, addStoryModal, setAddStoryModal, } = useContext(UserContext)
 
     const [hamburger, setHamburger] = useState(false)
 
     const handleLogout = () => {
         setToken("")
+        setDecode("")
         localStorage.removeItem('user_token_swiptory')
         setHamburger(!hamburger)
     }
-
+   
     return (
         <div className={style.header}>
 
@@ -50,7 +51,7 @@ function Header() {
                                 <div className={style.menuProfile}>
                                     <div>
                                         <img src={dp} alt="user" className={style.userimage} />
-                                        <h3>{decode.user.username}</h3>
+                                        <h3>{decode?.user?.username}</h3>
                                         <RxCross2 size={25} onClick={() => setHamburger(!hamburger)} className={style.crossIcon} />
                                     </div>
                                     <div className={style.menuProfileLogout}>

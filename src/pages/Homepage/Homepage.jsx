@@ -3,6 +3,7 @@ import { UserContext } from "../../App";
 import Filter from "../../components/Filter/Filter";
 import Story from "../../components/Story/Story";
 import style from "./Homepage.module.css"
+import UserStory from "../../components/UserStory/UserStory";
 
 function Homepage() {
 
@@ -29,18 +30,12 @@ function Homepage() {
         setSelectedCategory(category)
     }
 
-    const userStory = allUserStories.filter(user => user.userId === decode?.user?._id)
-
     return (
         <div className={style.homepage} >
 
             <Filter uniqueCategory={uniqueCategory} handleSelectedCategory={handleSelectedCategory} selectedCategory={selectedCategory} />
 
-            {userStory.length > 0 &&
-                <div className={`${style.storyhead} ${!token && style.yStory}`} >
-                    {userStory.length > 0 && token && <h2 className={style.storytitle}>Your Stories</h2>}
-                    <Story userStory={userStory} onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
-                </div>}
+            <UserStory openViewStoryModal={openViewStoryModal}/>
 
             {selectedCategory === "" ? (
                 // Show all stories when selectedCategory is empty

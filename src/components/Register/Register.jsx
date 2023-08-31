@@ -84,7 +84,7 @@ function Register() {
 
                     <div className={style.password}>
                         <label htmlFor="password">Password</label>
-                        <input type="text"
+                        <input type="password"
                             placeholder="Enter password"
                             name="password"
                             value={inputValue.password}
@@ -100,7 +100,10 @@ function Register() {
             </div>
 
             <div className={style.closebtn}>
-                <input type="button" value="X" onClick={() => setRegisterModal(!registerModal)} />
+                <input type="button" value="X" onClick={() => {
+                    setRegisterModal(!registerModal)
+                    setInputValue({ username: "", password: "" })
+                    }} />
             </div>
 
         </div>

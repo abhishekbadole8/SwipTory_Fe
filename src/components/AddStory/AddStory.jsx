@@ -87,6 +87,7 @@ function AddStory() {
                 setAddStoryModal(!addStoryModal)
                 setIsEdit(false)
                 setIsLoading(false)
+                
             }
         } catch (error) {
             setIsLoading(false)
@@ -169,7 +170,7 @@ function AddStory() {
                             <option value="car">Car</option>
                             <option value="flowers">Flower</option>
                             <option value="anime">Anime</option>
-                            <option value="catroon">Cartoon</option>
+                            <option value="cartoon">Cartoon</option>
                         </select>
                     </div>
 
