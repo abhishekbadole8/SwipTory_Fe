@@ -111,7 +111,7 @@ function ViewStory() {
         }
     };
 
-    //SetInterval for auto chnage slide
+    // SetInterval for auto chnage slide
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress(prev => {
@@ -151,11 +151,8 @@ function ViewStory() {
                                 {currentStory.images.map((_, i) => {
                                     return (
                                         <div className={style.storyBarWrapper} key={i} >
-                                            {/* <div className={style.barInner} />
-                                            <div className={style.barOuter} /> */}
                                             <div className={`${style.barInner}  ${!(i < currentImageIndex + 1) ? style.barInner : style.barOuter}`} />
-                                        </div>
-                                    )
+                                        </div>)
                                 })}
                             </div>
 
@@ -176,10 +173,11 @@ function ViewStory() {
 
                                 {/* Bookmark button*/}
                                 <div onClick={() => {
-                                    fetchBookmarkOrLike("updateBookmarks")
                                     if (!token) {
                                         setViewStoryModal(!viewStoryModal)
                                         setLoginModal(!loginModal)
+                                    } else {
+                                        fetchBookmarkOrLike("updateBookmarks")
                                     }
                                 }
                                 }>
@@ -188,10 +186,11 @@ function ViewStory() {
 
                                 {/* Like button*/}
                                 <div onClick={() => {
-                                    fetchBookmarkOrLike("updateLikes")
                                     if (!token) {
                                         setViewStoryModal(!viewStoryModal)
                                         setLoginModal(!loginModal)
+                                    } else {
+                                        fetchBookmarkOrLike("updateLikes")
                                     }
                                 }}>
                                     <AiFillHeart color={currentStory.likes.includes(decode?.user?._id) ? "red" : "white"} id={style.icon} size={27} />
