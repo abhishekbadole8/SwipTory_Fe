@@ -12,7 +12,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
     const [story, setStory] = useState([])
 
-    const [visibleStory, setVisibleStory] = useState(5) // stories to visible
+    const [visibleStory, setVisibleStory] = useState(6) // stories to visible
     const [storyWrapperWidth, setStoryWrapperWidth] = useState(0)
     const storyWidth = 201;
     const gap = 33.6
@@ -28,7 +28,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
         })
         setAddStoryModal(!addStoryModal)
     }
-
+    
     const showMoreStories = () => {
         setVisibleStory(prevVisible => prevVisible + prevVisible)
     }
@@ -78,8 +78,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
     useEffect(() => {
         const calculateVisibleStories = () => {
             if (storyWrapperWidth > 0) {
-                const availableWidth = storyWrapperWidth - gap;
-                const maxVisibleStories = Math.floor(availableWidth / (storyWidth))
+                const maxVisibleStories = Math.floor(storyWrapperWidth / (storyWidth + gap))
                 setVisibleStory(Math.min(maxVisibleStories, story.length))
             }
         }
