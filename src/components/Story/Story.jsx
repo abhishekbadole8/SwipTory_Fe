@@ -14,7 +14,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
     const [visibleStory, setVisibleStory] = useState(6) // stories to visible
     const [storyWrapperWidth, setStoryWrapperWidth] = useState(0)
-    const storyWidth = 201;
+    const storyWidth = 210;
     const gap = 33.6
 
     const handleEditButtonClick = (e, singleStory) => {
@@ -28,7 +28,7 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
         })
         setAddStoryModal(!addStoryModal)
     }
-    
+
     const showMoreStories = () => {
         setVisibleStory(prevVisible => prevVisible + prevVisible)
     }
