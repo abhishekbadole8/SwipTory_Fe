@@ -1,25 +1,28 @@
 import style from "./Filter.module.css"
 import filterbgimg from "../../assets/filter-bg.svg"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { UserContext } from "../../App"
 
 function Filter({ uniqueCategory, handleSelectedCategory, selectedCategory }) {
 
     const [loading, setLoading] = useState(true)
-    const [totalLoadingIteration, setTotalLoadingIteration] = useState(7)
+    const [totalLoadingIteration, setTotalLoadingIteration] = useState(8)
 
     useEffect(() => {
         if (uniqueCategory.length > 0) {
-            setLoading(false); 
+            setLoading(false);
         }
     }, [uniqueCategory])
 
     return (
         <div className={style.filter}>
 
-            <div className={style.filterTag} onClick={() => handleSelectedCategory('')}>
-                <img src={filterbgimg} alt="bg-img" className={`${selectedCategory === "" && style.filterTagActive}`} />
-                <h2>All</h2>
-            </div>
+            {!loading &&
+                <div className={style.filterTag} onClick={() => handleSelectedCategory('')}>
+                    <img src={filterbgimg} alt="bg-img" className={`${selectedCategory === "" && style.filterTagActive}`} />
+                    <h2>All</h2>
+                </div>
+            }
 
             {loading ?
                 Array.from({ length: totalLoadingIteration }).map((_, index) => (

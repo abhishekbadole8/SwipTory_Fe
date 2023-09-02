@@ -8,7 +8,8 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
     const storyWrapperRef = useRef()
 
-    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL ,loading, setLoading} = useContext(UserContext)
+    const [totalLoadingIteration, setTotalLoadingIteration] = useState(5)
 
     const [story, setStory] = useState([])
 
@@ -89,40 +90,32 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
 
         <div className={style.storyContainer} >
 
-            <h4>{bookmark && 'Your Bookmark'}</h4>
+            {bookmark && <h4>Your Bookmark</h4>}
 
             <div className={`${bookmark ? style.bookmarkStoryWrapper : style.storyWrapper} `} ref={storyWrapperRef}>
 
-                {story?.length === 0 ?
+                {story?.slice(0, visibleStory).map((individualStory, index) => {
+                    const { _id, images, heading, description } = individualStory;
 
-                    <div style={{ width: storyWidth, height: '150px', backgroundColor: "red" }} />
+                    return (
+                        <div className={style.parentDiv} key={_id}>
+                            <div className={style.story} key={_id} onClick={() => onClick(story, index)}>
+                                <div className={style.shadeTop} />
+                                <img src={images[0]} alt="story" />
+                                <div className={style.shadeBottom} />
 
-                    :
-                    <>
-                        {story?.slice(0, visibleStory).map((individualStory, index) => {
-                            const { _id, images, heading, description } = individualStory;
-
-                            return (
-                                <div className={style.parentDiv} key={_id}>
-                                    <div className={style.story} key={_id} onClick={() => onClick(story, index)}>
-                                        <div className={style.shadeTop} />
-                                        <img src={images[0]} alt="story" />
-                                        <div className={style.shadeBottom} />
-
-                                        <div className={style.content}>
-                                            <h5>{heading}</h5>
-                                            <p>{description}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className={style.editButton} onClick={(e) => handleEditButtonClick(e, individualStory)}>
-                                        {userStory && <button><TbEdit size={18} />Edit</button>}
-                                    </div>
+                                <div className={style.content}>
+                                    <h5>{heading}</h5>
+                                    <p>{description}</p>
                                 </div>
-                            )
-                        })}
-                    </>
-                }
+                            </div>
+
+                            <div className={style.editButton} onClick={(e) => handleEditButtonClick(e, individualStory)}>
+                                {userStory && <button><TbEdit size={18} />Edit</button>}
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
 
             {visibleStory < story?.length && (

@@ -67,6 +67,10 @@
     display: none;
 }
 
+.crossIcon {
+    cursor: pointer;
+}
+
 .hamburgerMenu .crossIcon,
 .hamburgerMenu #menuList {
     display: none;
@@ -84,7 +88,7 @@
 
     .hamburgerMenu {
         width: 100%;
-        bottom: -400%;
+        bottom: -380%;
         padding: 1rem 0;
     }
 

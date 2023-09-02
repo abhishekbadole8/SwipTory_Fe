@@ -14,7 +14,8 @@ function UserStory({ openViewStoryModal }) {
             {userStory.length > 0 &&
                 <div className={`${style.storyhead} ${!token && style.yStory}`} >
                     {userStory.length > 0 && token && <h2 className={style.storytitle}>Your Stories</h2>}
-                    <Story userStory={userStory} onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
+                    
+                    <Story userStory={userStory}  onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
                 </div>}
         </>
     )

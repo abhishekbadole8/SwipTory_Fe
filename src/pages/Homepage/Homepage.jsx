@@ -35,7 +35,20 @@ function Homepage() {
 
             <Filter uniqueCategory={uniqueCategory} handleSelectedCategory={handleSelectedCategory} selectedCategory={selectedCategory} />
 
-            <UserStory openViewStoryModal={openViewStoryModal}/>
+            {/* Loading css */}
+            {uniqueCategory.length == 0 &&
+                <div className={style.storyheadback}>
+                    <div className={style.backback} />
+                    <div className={style.storyContainerBack}>
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <div className={style.parentDivBack} />
+                        ))}
+                    </div>
+                    <div className={style.backback} />
+                </div>
+            }
+
+            <UserStory openViewStoryModal={openViewStoryModal} />
 
             {selectedCategory === "" ? (
                 // Show all stories when selectedCategory is empty

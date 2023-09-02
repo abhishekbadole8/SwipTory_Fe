@@ -13,6 +13,7 @@ import Bookmark from "./pages/Bookmark/Bookmark";
 import ViewStory from "./components/ViewStory/ViewStory";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import UserStory from "./components/UserStory/UserStory";
 
 export const UserContext = createContext();
 
@@ -24,8 +25,6 @@ function App() {
 
   const [token, setToken] = useState("");
   const [decode, setDecode] = useState({});
-
-  //const decode = token && jwt_decode(token);
 
   const headers = { headers: { Authorization: token } };
 
@@ -138,6 +137,7 @@ function App() {
               path="/bookmark"
               element={token ? <Bookmark /> : <Navigate to={"/homepage"} />}
             />
+            <Route exact path="/userstory" element={<UserStory />} />
           </Routes>
           {loginModal && <ModalWrapper />}
           {registerModal && <ModalWrapper />}
