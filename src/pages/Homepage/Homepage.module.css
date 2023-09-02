@@ -26,7 +26,7 @@
 
 .storyContainerBack {
     display: flex;
-    width: 100%;    
+    width: 100%;
     gap: 2.1rem;
     overflow-x: auto;
     white-space: nowrap;
@@ -61,9 +61,22 @@
 
     .storyhead {
         padding: 0;
+        margin-top: 1rem;
     }
 
     .storytitle {
         display: none;
+    }
+
+    .backback {
+        display: none;
+    }
+.parentDivBack{
+
+    margin-top: 0;
+}
+    .storyContainerBack {
+        flex-direction: column;
+        margin-bottom: 0;
     }
 }

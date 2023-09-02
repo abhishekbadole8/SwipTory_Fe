@@ -115,9 +115,6 @@
 }
 
 @media screen and (max-width:750px) {
-    .storyContainer {
-        padding: 0;
-    }
 
     .storyWrapper,
     .bookmarkStoryWrapper {
