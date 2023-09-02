@@ -69,13 +69,6 @@ function Header() {
                     </div>}
             </div>
 
-            {/* <div className={style.menu}>
-                <HiMenu size={28}
-                    style={{ cursor: "pointer" }} />
-            </div> */}
-
-
-
         </div >
     )
 }

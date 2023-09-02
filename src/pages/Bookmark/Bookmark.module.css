@@ -1,3 +1,10 @@
 .bookmark {
     padding: 1.35rem 1.75rem;
 }
+
+@media screen and (max-width:750px){
+    .bookmark {
+        padding: 1rem;
+    }
+    
+}
