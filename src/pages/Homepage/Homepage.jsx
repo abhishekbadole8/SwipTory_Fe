@@ -41,7 +41,7 @@ function Homepage() {
                     <div className={style.backback} />
                     <div className={style.storyContainerBack}>
                         {Array.from({ length: 6 }).map((_, index) => (
-                            <div className={style.parentDivBack} />
+                            <div className={style.parentDivBack} key={index}/>
                         ))}
                     </div>
                     <div className={style.backback} />

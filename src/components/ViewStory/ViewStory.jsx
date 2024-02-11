@@ -21,19 +21,19 @@ function ViewStory() {
     // Current story object save here
     const currentStory = selectedStoryCatArray[currentStoryIndex]
 
+    const setCurrentStoryAndImage = (storyIndex, imageIndex) => {
+        setCurrentStoryIndex(storyIndex);
+        setCurrentImageIndex(imageIndex);
+    };
+
     const goToNextStory = () => {
         const nextStoryIndex = (currentStoryIndex + 1) % selectedStoryCatArray.length;
         setCurrentStoryAndImage(nextStoryIndex, 0);
     };
 
     const goToPreviousStory = () => {
-        const prevStoryIndex = currentStoryIndex === 0 ? selectedStoryCatArray.length - 1 : currentStoryIndex - 1;
+        const prevStoryIndex = currentStoryIndex === 0 ? selectedStoryCatArray.length - 1 : currentStoryIndex - 1;       
         setCurrentStoryAndImage(prevStoryIndex, selectedStoryCatArray[prevStoryIndex].images.length - 1);
-    };
-
-    const setCurrentStoryAndImage = (storyIndex, imageIndex) => {
-        setCurrentStoryIndex(storyIndex);
-        setCurrentImageIndex(imageIndex);
     };
 
     // Previous button logic

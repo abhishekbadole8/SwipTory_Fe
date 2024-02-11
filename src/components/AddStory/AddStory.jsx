@@ -64,6 +64,7 @@ function AddStory() {
         return ""
     }
 
+    // Get story & update story function
     const fetchAddStory = async () => {
         try {
             let response;

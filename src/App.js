@@ -18,10 +18,8 @@ import UserStory from "./components/UserStory/UserStory";
 export const UserContext = createContext();
 
 function App() {
-  const BASE_USER_URL = `https://swipstory.onrender.com/api/user`;
-  const BASE_STORY_URL = `https://swipstory.onrender.com/api/story`;
-  // const BASE_USER_URL = `http://localhost:5000/api/user`;
-  // const BASE_STORY_URL = `http://localhost:5000/api/story`;
+  const BASE_USER_URL = `https://swiptory.up.railway.app/api/user`;
+  const BASE_STORY_URL = `https://swiptory.up.railway.app/api/story`;
 
   const [token, setToken] = useState("");
   const [decode, setDecode] = useState({});
