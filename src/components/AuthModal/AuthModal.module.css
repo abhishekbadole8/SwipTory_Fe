@@ -86,9 +86,6 @@
     background-color: rgba(255, 0, 0, 0.1);
 }
 
-.errorMsg {
-    color: #FF0E0E;
-}
 
 @media screen and (max-width:750px) {
     .authContainer {

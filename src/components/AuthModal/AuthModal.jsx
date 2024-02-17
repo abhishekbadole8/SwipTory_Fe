@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import style from "./AuthModal.module.css";
 import useAuthStore from '../../services/auth';
 import validateForm from '../../utils/validateForm';
@@ -6,11 +6,12 @@ import { UserContext } from '../../App';
 
 function AuthModal() {
 
-    const { login } = useAuthStore();
-    const { isAuthModalValue, setIsAuthModal } = useContext(UserContext)
+    const { login, register } = useAuthStore();
+    const { isAuthModalValue, setIsAuthModal, setIsAuthModalValue } = useContext(UserContext)
 
     const [formData, setFormData] = useState({ username: "", password: "" })
     const [errorMsg, setErrorMsg] = useState({ username: "", password: "", generic: "" });
+    const [redirectMsg, setRedirectMsg] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     const handleInput = (e) => {
@@ -20,15 +21,31 @@ function AuthModal() {
     }
 
     // handle form submit
-    const handelSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errors = validateForm(formData)
 
         if (Object.keys(errors).length === 0) {
             setIsLoading(true)
             try {
-                await login(formData.username, formData.password)
-                setFormData({ username: "", password: "" })
+                if (isAuthModalValue === 'Login') {
+                    await login({ ...formData })
+                    setFormData({ username: "", password: "" })
+                    setIsAuthModal(false)
+                    setIsAuthModalValue("")
+                } else {
+                    const isRegistered = await register({ ...formData })
+                    
+                    if (isRegistered) {
+                        setFormData({ username: "", password: "" })
+                        setRedirectMsg('User Registered, Redirecting to Login...')
+
+                        setTimeout(() => {
+                            setIsAuthModalValue("Login")
+                            setRedirectMsg("")
+                        }, 2000);
+                    }
+                }
             } catch (error) {
                 setErrorMsg(prev => ({ ...prev, "generic": error.message }))
             } finally {
@@ -53,7 +70,7 @@ function AuthModal() {
                 <div className={style.authContainerInner}>
                     <h2 className={style.modalTitle}> {isAuthModalValue} To SwipTory</h2>
 
-                    <form method="POST" onSubmit={handelSubmit} className={style.authForm}>
+                    <form method="POST" onSubmit={handleSubmit} className={style.authForm}>
                         <div className={style.inputGroup}>
                             <label htmlFor="username">Username</label>
                             <input type="text" placeholder="Enter Username" name="username" value={formData.username} onChange={handleInput} className={errorMsg.password ? style.inputError : ""} />
@@ -65,6 +82,7 @@ function AuthModal() {
                             <input type="password" placeholder="Enter password" name="password" value={formData.password} onChange={handleInput} />
                             {errorMsg.password && <span className={style.errorMsg}>{errorMsg.password}</span>}
                             {errorMsg.generic && <span className={style.errorMsg}>{errorMsg.generic}</span>}
+                            {redirectMsg && <span className={style.errorMsg} style={{ color: "green" }}>{redirectMsg}</span>}
                         </div>
 
                         <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`} disabled={isLoading}>

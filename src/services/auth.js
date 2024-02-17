@@ -7,7 +7,7 @@ const useAuthStore = create((set) => ({
   authToken: localStorage.getItem("authToken"),
 
   // function to authenticate user and update token
-  login: async (username, password) => {
+  login: async ({ username, password }) => {
     try {
       const response = await api.post("/api/user/login", {
         username,
@@ -24,6 +24,19 @@ const useAuthStore = create((set) => ({
       throw new Error(
         error.response.data.error || "Failed to authenticate user"
       );
+    }
+  },
+
+  register: async ({ username, password }) => {
+    try {
+      await api.post("/api/user/register", {
+        username,
+        password,
+      });
+
+      return true;
+    } catch (error) {
+      throw new Error(error.response.data.error || "Failed to register user");
     }
   },
 
