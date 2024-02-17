@@ -10,7 +10,7 @@ import { RxCross2 } from "react-icons/rx";
 function Header() {
     const navigate = useNavigate()
 
-    const { token, setToken, decode, setDecode, registerModal, setRegisterModal, loginModal, setLoginModal, addStoryModal, setAddStoryModal, } = useContext(UserContext)
+    const { token, setToken, decode, setDecode, setIsAuthModal, setIsAuthModalValue, addStoryModal, setAddStoryModal, } = useContext(UserContext)
 
     const [hamburger, setHamburger] = useState(false)
 
@@ -20,7 +20,13 @@ function Header() {
         localStorage.removeItem('user_token_swiptory')
         setHamburger(!hamburger)
     }
-   
+
+    // handle open auth modal
+    const handleOpenAuthModal = (value) => {
+        setIsAuthModal(true)
+        setIsAuthModalValue(value)
+    }
+
     return (
         <div className={style.header}>
 
@@ -31,8 +37,8 @@ function Header() {
             <div className={style.registerloginbtn}>
                 {!token ?
                     <div>
-                        <button onClick={() => setRegisterModal(!registerModal)}>Register</button>
-                        <button onClick={() => setLoginModal(!loginModal)} id={style.signinbtn} >Sign In</button>
+                        <button onClick={() => handleOpenAuthModal('Register')}>Register</button>
+                        <button onClick={() => handleOpenAuthModal('Login')} id={style.signinbtn} >Sign In</button>
                     </div> :
                     <div>
                         <div className={style.rowItem}>

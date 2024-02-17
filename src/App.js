@@ -1,11 +1,11 @@
 import React, { useState, useEffect, createContext } from "react";
+import "./assets/Styles/global.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import style from "./App.module.css";
 import Homepage from "./pages/Homepage/Homepage";
 import Header from "./components/Header/Header";
 import ModalWrapper from "./components/ModalWrapper/ModalWrapper";
@@ -29,8 +29,8 @@ function App() {
   const [allUserStories, setAllUserStories] = useState([]); // all stories here
   const [filteredUserStories, setfilteredUserStories] = useState([]); // filter click story save here
 
-  const [loginModal, setLoginModal] = useState(false);
-  const [registerModal, setRegisterModal] = useState(false);
+  const [isAuthModal, setIsAuthModal] = useState(false);
+  const [isAuthModalValue, setIsAuthModalValue] = useState("");
   const [addStoryModal, setAddStoryModal] = useState(false);
   const [viewStoryModal, setViewStoryModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +88,7 @@ function App() {
   }, [token]);
 
   return (
-    <div className={style.App}>
+    <div className="App">
       <UserContext.Provider
         value={{
           BASE_USER_URL,
@@ -102,10 +102,10 @@ function App() {
           setDecode,
           allUserStories,
           setAllUserStories,
-          loginModal,
-          setLoginModal,
-          registerModal,
-          setRegisterModal,
+          isAuthModal,
+          setIsAuthModal,
+          isAuthModalValue,
+          setIsAuthModalValue,
           addStoryModal,
           setAddStoryModal,
           isLoading,
@@ -137,8 +137,7 @@ function App() {
             />
             <Route exact path="/userstory" element={<UserStory />} />
           </Routes>
-          {loginModal && <ModalWrapper />}
-          {registerModal && <ModalWrapper />}
+          {isAuthModal && <ModalWrapper />}
           {addStoryModal && <ModalWrapper />}
           {viewStoryModal && <ViewStory />}
         </Router>

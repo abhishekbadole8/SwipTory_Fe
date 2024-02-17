@@ -1,0 +1,131 @@
+.authContainer {
+    padding: 5rem;
+    background-color: #f8f8f8;
+    font-family: 'DM Sans', sans-serif;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.authForm {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    position: relative;
+}
+
+.inputGroup input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: .75rem 1rem;
+}
+
+.errorMsg {
+    width: 100%;
+    color: #FF0E0E;
+    position: absolute;
+    font-size: .75rem;
+    bottom: -1.2rem;
+    left: 45.5%;
+}
+
+.authSubmitBtn {
+    margin-top: 2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: .75rem 2rem;
+    background-color: #73ABFF;
+    box-shadow: 0 4px 10px rgba(115, 171, 255, 0.3);
+}
+
+.authSubmitBtn:hover {
+    background-color: #5e8add;
+}
+
+.closebtn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+}
+
+.closebtn button {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background: #FFF;
+    color: red;
+    border-radius: 50%;
+    border: 3px solid red;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: .4rem;
+    transition: background-color 0.3s ease;
+}
+
+.closebtn button:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.errorMsg {
+    color: #FF0E0E;
+}
+
+@media screen and (max-width:750px) {
+    .authContainer {
+        padding: 3rem 4.5rem;
+    }
+
+    .authContainer h2 {
+        font-size: 1.35rem;
+    }
+
+    .authForm {
+        gap: 1.2rem;
+    }
+
+    .inputGroup {
+        font-size: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .inputGroup input {
+        padding: .55rem .75rem;
+    }
+
+    .errorMsg {
+        bottom: -1.2rem;
+        left: .5rem;
+    }
+
+    .closebtn {
+        top: .7rem;
+        right: .7rem;
+    }
+
+    .authSubmitBtn {
+        margin-top: 1.5rem;
+    }
+
+}
