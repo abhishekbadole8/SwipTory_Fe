@@ -6,19 +6,21 @@ import { UserContext } from "../../App";
 import style from "./Header.module.css";
 import dp from "../../assets/dp.svg"
 import { RxCross2 } from "react-icons/rx";
+import useAuthStore from "../../services/auth";
 
 function Header() {
     const navigate = useNavigate()
 
-    const { token, setToken, decode, setDecode, setIsAuthModal, setIsAuthModalValue, addStoryModal, setAddStoryModal, } = useContext(UserContext)
+    const { isAuthenticated, logout } = useAuthStore()
+
+    const { decode, setIsAuthModal, setIsAuthModalValue, addStoryModal, setAddStoryModal, } = useContext(UserContext)
 
     const [hamburger, setHamburger] = useState(false)
 
+    // handle logout and hamburger modal
     const handleLogout = () => {
-        setToken("")
-        setDecode("")
-        localStorage.removeItem('user_token_swiptory')
-        setHamburger(!hamburger)
+        logout()
+        setHamburger(false)
     }
 
     // handle open auth modal
@@ -35,7 +37,7 @@ function Header() {
             </div>
 
             <div className={style.registerloginbtn}>
-                {!token ?
+                {!isAuthenticated() ?
                     <div>
                         <button onClick={() => handleOpenAuthModal('Register')}>Register</button>
                         <button onClick={() => handleOpenAuthModal('Login')} id={style.signinbtn} >Sign In</button>

@@ -27,6 +27,7 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  // Function to register user
   register: async ({ username, password }) => {
     try {
       await api.post("/api/user/register", {
@@ -40,9 +41,17 @@ const useAuthStore = create((set) => ({
     }
   },
 
+  // function to logout user
+  logout: () => {
+    // Clear token from local storage and state
+    localStorage.removeItem("authToken");
+    set({ authToken: null });
+  },
+
   // function to check if user is authenticated
   isAuthenticated: () => {
     // check if token exists in zustand's state
+    // !! return's boolean value
     return !!useAuthStore.getState().authToken;
   },
 
