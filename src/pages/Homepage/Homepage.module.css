@@ -5,12 +5,19 @@
 }
 
 .storyhead {
-    padding: 2.15rem 0 1.25rem 0;
+    padding: 2.25rem 0 1.25rem 0;
 }
 
 .storytitle {
     font-size: 1.6rem;
     font-weight: 700;
+    padding-bottom: 2.25rem;
+}
+
+.storyWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.1rem;
 }
 
 /* ---------- loading.css ------------- */
@@ -71,10 +78,12 @@
     .backback {
         display: none;
     }
-.parentDivBack{
 
-    margin-top: 0;
-}
+    .parentDivBack {
+
+        margin-top: 0;
+    }
+
     .storyContainerBack {
         flex-direction: column;
         margin-bottom: 0;

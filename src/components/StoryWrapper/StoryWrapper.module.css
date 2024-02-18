@@ -1,30 +1,29 @@
 .storyhead {
-    padding: 2.15rem 0 1.25rem 0;
+    padding: 2.25rem 0 1.25rem 0;
 }
 
 .storytitle {
     font-size: 1.6rem;
     font-weight: 700;
+    padding-bottom: 2.25rem;
 }
 
-.div {
-    display: none;
-}
-
-.yStory {
-    display: none;
+.storyWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.1rem;
 }
 
 @media screen and (max-width:750px) {
-    .homepage {
-        padding: 1rem;
-    }
+
 
     .storyhead {
         padding: 0;
+        margin-top: 1rem;
     }
 
     .storytitle {
         display: none;
     }
+
 }

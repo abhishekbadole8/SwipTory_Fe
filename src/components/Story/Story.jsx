@@ -4,20 +4,15 @@ import style from "./Story.module.css";
 import { UserContext } from "../../App";
 import { TbEdit } from "react-icons/tb";
 
-function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
+function Story({ story, onClick, storyTitle }) {
 
     const storyWrapperRef = useRef()
 
-    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, BASE_STORY_URL ,loading, setLoading} = useContext(UserContext)
-    const [totalLoadingIteration, setTotalLoadingIteration] = useState(5)
+    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, } = useContext(UserContext)
 
-    const [story, setStory] = useState([])
+    const { _id, images, heading, description } = story;
 
-    const [visibleStory, setVisibleStory] = useState(6) // stories to visible
-    const [storyWrapperWidth, setStoryWrapperWidth] = useState(0)
-    const storyWidth = 210;
-    const gap = 33.6
-
+    // handle edit button
     const handleEditButtonClick = (e, singleStory) => {
         e.stopPropagation()
         updateEditStoryInputValue({
@@ -30,101 +25,39 @@ function Story({ userStory, category, onClick, bookmark, userBookmarks }) {
         setAddStoryModal(!addStoryModal)
     }
 
-    const showMoreStories = () => {
-        setVisibleStory(prevVisible => prevVisible + prevVisible)
-    }
-
-    // for story fetching  are per category
-    useEffect(() => {
-        const fetchStoryCategoryWise = async () => {
-            try {
-                let response;
-                if (category) {
-                    response = await axios.get(BASE_STORY_URL, {
-                        params: { category },
-                    });
-                }
-                else if (bookmark) {
-                    setStory(userBookmarks)
-                }
-                else {
-                    setStory(userStory)
-                    return;
-                }
-                if (response) {
-                    const data = response.data
-                    setStory(data)
-                }
-            }
-            catch (error) {
-                console.log(`Error in category product fetch:${error}`)
-            }
-        }
-        fetchStoryCategoryWise()
-    }, [category, userStory, BASE_STORY_URL, bookmark, addStoryModal])
-
-    // calculate total width of wrapper continer
-    useEffect(() => {
-        const handleResize = () => {
-            const newStoryWrapperrWidth = storyWrapperRef.current.offsetWidth;
-            setStoryWrapperWidth(newStoryWrapperrWidth);
-        }
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, [])
-
-    //set visiblestory no. to display
-    useEffect(() => {
-        const calculateVisibleStories = () => {
-            if (storyWrapperWidth > 0) {
-                const maxVisibleStories = Math.floor(storyWrapperWidth / (storyWidth + gap))
-                setVisibleStory(Math.min(maxVisibleStories, story?.length))
-            }
-        }
-        calculateVisibleStories()
-    }, [storyWrapperWidth, story])
-
     return (
+        <>
+            <div className={style.storyWrapper} ref={storyWrapperRef}>
 
-        <div className={style.storyContainer} >
+                <div className={style.parentDiv} >
+                    <div className={style.story} onClick={() => onClick(story)}>
+                        <div className={style.shadeTop} />
+                        <img src={images[0]} alt="story" />
+                        <div className={style.shadeBottom} />
 
-            {bookmark && <h4>Your Bookmark</h4>}
-
-            <div className={`${bookmark ? style.bookmarkStoryWrapper : style.storyWrapper} `} ref={storyWrapperRef}>
-
-                {story?.slice(0, visibleStory).map((individualStory, index) => {
-                    const { _id, images, heading, description } = individualStory;
-
-                    return (
-                        <div className={style.parentDiv} key={_id}>
-                            <div className={style.story} key={_id} onClick={() => onClick(story, index)}>
-                                <div className={style.shadeTop} />
-                                <img src={images[0]} alt="story" />
-                                <div className={style.shadeBottom} />
-
-                                <div className={style.content}>
-                                    <h5>{heading}</h5>
-                                    <p>{description}</p>
-                                </div>
-                            </div>
-
-                            <div className={style.editButton} onClick={(e) => handleEditButtonClick(e, individualStory)}>
-                                {userStory && <button><TbEdit size={18} />Edit</button>}
-                            </div>
+                        <div className={style.content}>
+                            <h5>{heading}</h5>
+                            <p>{description}</p>
                         </div>
-                    )
-                })}
+                    </div>
+
+                    {storyTitle &&
+                        (<div className={style.editButton} onClick={(e) => handleEditButtonClick(e, story)}>
+                            <button><TbEdit size={18} />Edit</button>
+                        </div>)}
+                </div>
+
             </div>
 
+            {/* 
             {visibleStory < story?.length && (
                 <button className={style.seemorebtn} onClick={showMoreStories}>
                     See More
                 </button>
-            )}
+            )} */}
 
-        </div >
+        </>
+
     )
 }
 

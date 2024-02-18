@@ -1,19 +1,20 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HiMenu } from "react-icons/hi";
-import { BsFillBookmarkFill } from "react-icons/bs";
 import { UserContext } from "../../App";
 import style from "./Header.module.css";
-import dp from "../../assets/dp.svg"
-import { RxCross2 } from "react-icons/rx";
-import useAuthStore from "../../services/auth";
+import useAuthStore from "../../services/authStore";
+import { FaUserCircle } from "react-icons/fa";
+import AuthButtons from "../AuthButtons/AuthButtons";
+import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
+import { BsFillBookmarkFill } from "react-icons/bs";
 
 function Header() {
     const navigate = useNavigate()
 
     const { isAuthenticated, logout } = useAuthStore()
 
-    const { decode, setIsAuthModal, setIsAuthModalValue, addStoryModal, setAddStoryModal, } = useContext(UserContext)
+    const {  setIsAuthModal, setIsAuthModalValue, addStoryModal, setAddStoryModal, } = useContext(UserContext)
 
     const [hamburger, setHamburger] = useState(false)
 
@@ -37,43 +38,20 @@ function Header() {
             </div>
 
             <div className={style.registerloginbtn}>
-                {!isAuthenticated() ?
-                    <div>
-                        <button onClick={() => handleOpenAuthModal('Register')}>Register</button>
-                        <button onClick={() => handleOpenAuthModal('Login')} id={style.signinbtn} >Sign In</button>
-                    </div> :
+                {!isAuthenticated() ? <AuthButtons handleOpenAuthModal={handleOpenAuthModal} />
+                    :
                     <div>
                         <div className={style.rowItem}>
                             <button onClick={() => navigate('/bookmark')}><BsFillBookmarkFill color="#fff" size={18} />Bookmark</button>
 
                             <button onClick={() => setAddStoryModal(!addStoryModal)}>Add Story</button>
 
-                            <img src={dp} alt="user" className={style.userimage} />
+                            <FaUserCircle size={35} color="grey" />
                         </div>
 
-                        <HiMenu size={25} onClick={() => setHamburger(!hamburger)} style={{ cursor: "pointer" }} />
+                        <HiMenu size={28} onClick={() => setHamburger(!hamburger)} style={{ cursor: "pointer" }} />
 
-                        {hamburger &&
-                            <div className={style.hamburgerMenu}>
-
-                                <div className={style.menuProfile}>
-                                    <div>
-                                        <img src={dp} alt="user" className={style.userimage} />
-                                        <h3>{decode?.user?.username}</h3>
-                                        <RxCross2 size={25} onClick={() => setHamburger(!hamburger)} className={style.crossIcon} />
-                                    </div>
-                                    <div className={style.menuProfileLogout}>
-                                        <button onClick={handleLogout}>Logout</button>
-                                    </div>
-                                </div>
-
-                                <div id={style.menuList}>
-                                    <button onClick={() => setAddStoryModal(!addStoryModal)}>Add Story</button>
-                                    <button onClick={() => navigate('/bookmark')}><BsFillBookmarkFill color="#fff" size={23} />Bookmark</button>
-                                    <button onClick={handleLogout}>Logout</button>
-                                </div>
-
-                            </div>}
+                        {hamburger && <HamburgerMenu handleLogout={handleLogout} setHamburger={setHamburger} />}
                     </div>}
             </div>
 

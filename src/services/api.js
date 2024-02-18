@@ -1,5 +1,5 @@
 import axios from "axios";
-import useAuthStore from "./auth";
+import useAuthStore from "./authStore";
 
 // Base URL of the backend API
 const baseURL = `http://localhost:5000`;

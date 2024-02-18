@@ -1,0 +1,62 @@
+.hamburgerMenu {
+    display: flex;
+    flex-direction: column;
+    bottom: -175%;
+    right: 0;
+    padding: 1.2rem 2.25rem;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.menuProfile {
+    display: flex;
+    flex-direction: column;
+}
+
+.menuProfileLogout {
+    display: none;
+}
+
+.crossIcon {
+    cursor: pointer;
+}
+
+.hamburgerMenu .crossIcon,
+.hamburgerMenu #menuList {
+    display: none;
+}
+
+@media screen and (max-width:750px) {
+
+    .hamburgerMenu {
+        width: 100%;
+        bottom: -380%;
+        padding: 1rem 0;
+    }
+
+    .hamburgerMenu #menuList {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hamburgerMenu #menuList button {
+        width: 95%;
+        display: flex;
+        justify-content: center;
+        padding: .5rem 1.25rem;
+        border-radius: 15px;
+        font-size: 1.05rem;
+    }
+
+    .menuProfile .menuProfileLogout,
+    .registerloginbtn .rowItem {
+        display: none;
+    }
+
+    .menuProfile .crossIcon,
+    #menuList {
+        display: block;
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState,  createContext } from "react";
 import "./assets/Styles/global.css";
 import {
   BrowserRouter as Router,
@@ -11,14 +11,10 @@ import Header from "./components/Header/Header";
 import ModalWrapper from "./components/ModalWrapper/ModalWrapper";
 import Bookmark from "./pages/Bookmark/Bookmark";
 import ViewStory from "./components/ViewStory/ViewStory";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import UserStory from "./components/UserStory/UserStory";
 
 export const UserContext = createContext();
 
 function App() {
-  const BASE_USER_URL = `https://swiptory.up.railway.app/api/user`;
   const BASE_STORY_URL = `https://swiptory.up.railway.app/api/story`;
 
   const [token, setToken] = useState("");
@@ -31,6 +27,7 @@ function App() {
 
   const [isAuthModal, setIsAuthModal] = useState(false);
   const [isAuthModalValue, setIsAuthModalValue] = useState("");
+  
   const [addStoryModal, setAddStoryModal] = useState(false);
   const [viewStoryModal, setViewStoryModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,43 +52,10 @@ function App() {
     setIsEdit(!isEdit);
   };
 
-  // fetch story
-  useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        const response = await axios.get(BASE_STORY_URL);
-        if (response) {
-          const data = response.data;
-          setAllUserStories(data);
-        }
-      } catch (error) {
-        console.log(`Error in Fetching story:${error}`);
-      }
-    };
-    fetchStory();
-  }, [viewStoryModal, addStoryModal, BASE_STORY_URL]);
-
-  // If localstorage has already token
-  useEffect(() => {
-    const storedToken = localStorage.getItem("user_token_swiptory");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
-
-  // seting decoded user
-  useEffect(() => {
-    if (token) {
-      const decodedToken = jwt_decode(token);
-      setDecode(decodedToken);
-    }
-  }, [token]);
-
   return (
     <div className="App">
       <UserContext.Provider
         value={{
-          BASE_USER_URL,
           BASE_STORY_URL,
           headers,
           inputValue,
@@ -135,7 +99,6 @@ function App() {
               path="/bookmark"
               element={token ? <Bookmark /> : <Navigate to={"/homepage"} />}
             />
-            <Route exact path="/userstory" element={<UserStory />} />
           </Routes>
           {isAuthModal && <ModalWrapper />}
           {addStoryModal && <ModalWrapper />}

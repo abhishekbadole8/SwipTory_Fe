@@ -1,3 +1,4 @@
+
 .storyContainer {
     padding: 1rem 0 0 0;
     font-family: 'DM Sans', sans-serif;
@@ -10,12 +11,6 @@
 .storyContainer h4 {
     font-size: 1.6rem;
     font-weight: 700;
-}
-
-.storyWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2.1rem;
 }
 
 /* If Bookmark is true */

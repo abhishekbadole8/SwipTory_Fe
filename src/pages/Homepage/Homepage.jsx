@@ -1,23 +1,20 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import Filter from "../../components/Filter/Filter";
-import Story from "../../components/Story/Story";
 import style from "./Homepage.module.css"
-import UserStory from "../../components/UserStory/UserStory";
+import useStoryStore from "../../services/storyStore";
+import useAuthStore from "../../services/authStore";
+import StoryWrapper from "../../components/StoryWrapper/StoryWrapper";
 
 function Homepage() {
 
-    const { viewStoryModal, setViewStoryModal, token, allUserStories, setSelectedStoryCatArray, setSelectedStoryCatIndex, decode } = useContext(UserContext)
+    const { getStories, categories, getUserStories } = useStoryStore(); // story store
+
+    const { user, authToken, setUserFromToken } = useAuthStore() //  auth store
+
+    const { viewStoryModal, setViewStoryModal, setSelectedStoryCatArray, setSelectedStoryCatIndex } = useContext(UserContext)
 
     const [selectedCategory, setSelectedCategory] = useState("");
-
-    // Unique Category Saved here
-    const uniqueCategory = [];
-    allUserStories.forEach((story) => {
-        if (!uniqueCategory.includes(story.category)) {
-            uniqueCategory.push(story.category)
-        }
-    })
 
     const openViewStoryModal = (story, index) => {
         setSelectedStoryCatArray(story) // seting array of objects of all stories of that categpry
@@ -30,45 +27,41 @@ function Homepage() {
         setSelectedCategory(category)
     }
 
+    useEffect(() => {
+        getStories()
+        setUserFromToken(authToken)
+    }, [authToken])
+
     return (
         <div className={style.homepage} >
 
-            <Filter uniqueCategory={uniqueCategory} handleSelectedCategory={handleSelectedCategory} selectedCategory={selectedCategory} />
+            <Filter categories={categories} handleSelectedCategory={handleSelectedCategory} selectedCategory={selectedCategory} />
 
             {/* Loading css */}
-            {uniqueCategory.length == 0 &&
+            {/* {categories.length == 0 &&
                 <div className={style.storyheadback}>
                     <div className={style.backback} />
                     <div className={style.storyContainerBack}>
                         {Array.from({ length: 6 }).map((_, index) => (
-                            <div className={style.parentDivBack} key={index}/>
+                            <div className={style.parentDivBack} key={index} />
                         ))}
                     </div>
                     <div className={style.backback} />
                 </div>
-            }
+            } */}
 
-            <UserStory openViewStoryModal={openViewStoryModal} />
+            {getUserStories(user?._id).length > 0 && <StoryWrapper storyTitle={'Your Stories'} openViewStoryModal={openViewStoryModal} />}
 
-            {selectedCategory === "" ? (
-                // Show all stories when selectedCategory is empty
-                uniqueCategory.map((category, index) => (
-                    <div className={style.storyhead} key={index}>
-                        <h2 className={style.storytitle}>{`Top Stories About ${category[0].toUpperCase() + category.slice(1)}`}</h2>
-                        <Story category={category} onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
-                    </div>
-                ))
-            ) : (
-                // Show stories from the selected category
-                uniqueCategory
+            {selectedCategory === "" ?
+                (categories.map((category, index) => (
+                    <StoryWrapper key={index} category={category} openViewStoryModal={openViewStoryModal} />
+                )))
+                :
+                (categories
                     .filter(category => category === selectedCategory)
                     .map((category, index) => (
-                        <div className={style.storyhead} key={index}>
-                            <h2 className={style.storytitle}>{`Top Stories About ${category[0].toUpperCase() + category.slice(1)}`}</h2>
-                            <Story category={category} onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
-                        </div>
-                    ))
-            )}
+                        <StoryWrapper key={index} category={category} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
+                    )))}
 
         </div >
     )

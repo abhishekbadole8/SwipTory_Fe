@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import api from "./api";
+import jwt_decode  from "jwt-decode";
 
 // Create a Zustand store for authentication state
 const useAuthStore = create((set) => ({
   // initial token value from local storage
   authToken: localStorage.getItem("authToken"),
+  user: null,
 
   // function to authenticate user and update token
   login: async ({ username, password }) => {
@@ -38,6 +40,16 @@ const useAuthStore = create((set) => ({
       return true;
     } catch (error) {
       throw new Error(error.response.data.error || "Failed to register user");
+    }
+  },
+
+  // function to decode
+  setUserFromToken: (authToken) => {
+    try {
+      const decodedToken = jwt_decode(authToken);
+      set({ user: decodedToken.user });
+    } catch (error) {
+      set({ user: null });
     }
   },
 
