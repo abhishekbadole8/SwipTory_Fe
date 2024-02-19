@@ -1,38 +1,69 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "./AddStory.module.css";
 import { UserContext } from "../../App";
-import axios from "axios";
+import Slide from "./Slide";
+import AddStoryForm from "./AddStoryForm";
+import validateAddStoryForm from "../../utils/validateAddStoryForm";
+import useStoryStore from "../../services/storyStore";
+import useAuthStore from "../../services/authStore";
 
 function AddStory() {
 
-    const { addStoryModal, setAddStoryModal, addStoryInputValue, setAddStoryInputValue, BASE_STORY_URL, headers, decode, isEdit, setIsEdit, isLoading, setIsLoading } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, isEdit, setIsEdit } = useContext(UserContext)
+
+    const { createStory } = useStoryStore()
+    const { user } = useAuthStore()
+
+    const [addStoryFormData, setAddStoryFormData] = useState({
+        heading: "",
+        description: "",
+        category: "",
+        images: []
+    });
+    // const [images, setImages] = useState([])
 
     const [currentSlide, setCurrentSlide] = useState(1)
-    const [error, setError] = useState('')
+    const [errorMsg, setErrorMsg] = useState({
+        heading: "",
+        description: "",
+        category: "",
+        images: "",
+    })
+    const [isLoading, setIsLoading] = useState(false)
 
+    // handle input chnages 
     const handleAddStoryInput = (e) => {
         const fieldName = e.target.name;
         const fieldValue = e.target.value;
 
         if (fieldName === 'images') {
-            const updatedImages = [...addStoryInputValue.images];
+            const updatedImages = [...addStoryFormData.images];
             updatedImages[currentSlide - 1] = fieldValue; // Update image URL for the current slide
-            setAddStoryInputValue((prevValue) => ({
+            setAddStoryFormData((prevValue) => ({
                 ...prevValue,
                 images: updatedImages,
             }));
         } else {
-            setAddStoryInputValue((prevValue) => ({
+            setAddStoryFormData((prevValue) => ({
                 ...prevValue,
                 [fieldName]: fieldValue,
             }));
         }
+        setErrorMsg((prevError) => ({ ...prevError, [fieldName]: "" }))
     }
 
+    // handle next & add more click
     const handleAddMoreClick = () => {
-        if (addStoryInputValue.images[currentSlide - 1]) {
+        const errors = validateAddStoryForm(addStoryFormData, currentSlide)
+
+        if (Object.keys(errors).length !== 0) {
+            setErrorMsg((prevError) => ({ ...prevError, ...errors }))
+            return;
+        }
+
+        if (addStoryFormData.images[currentSlide - 1]) {
             if (currentSlide < 6) {
-                setAddStoryInputValue((prevValue) => {
+                setAddStoryFormData((prevValue) => {
                     const updatedImages = [...prevValue.images];
                     updatedImages[currentSlide] = ""
                     return {
@@ -51,67 +82,30 @@ function AddStory() {
         }
     }
 
-    const handleError = () => {
-        if (!addStoryInputValue.heading) {
-            return "Please add heading"
-        } else if (!addStoryInputValue.description) {
-            return "Please add description"
-        } else if (!addStoryInputValue.category) {
-            return "Please select category"
-        } else if (addStoryInputValue.images.length < 3 || addStoryInputValue.images.length > 6) {
-            return "There should be minimun 3 slides, and maximum 6"
-        }
-        return ""
+    // handle cancel
+    const handleCancel = () => {
+        setAddStoryModal(!addStoryModal)
+        setIsEdit(false)
+        setAddStoryFormData({
+            heading: '',
+            description: '',
+            category: '',
+            images: [''], // Set the first image URL as an empty string
+        });
     }
 
-    // Get story & update story function
-    const fetchAddStory = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
         try {
-            let response;
-            if (isEdit === false) {
-                response = await axios.post(BASE_STORY_URL + '/add', {
-                    userId: decode.user._id,
-                    ...addStoryInputValue,
-                }, headers)
-            }
-            if (isEdit === true) {
-                response = await axios.patch(BASE_STORY_URL + '/edit/' + decode?.user?._id + '/' + addStoryInputValue.storyId, {
-                    category: addStoryInputValue.category,
-                    description: addStoryInputValue.description,
-                    heading: addStoryInputValue.heading,
-                    images: [...addStoryInputValue.images],
-                    action: "updateInfoAndImage"
-                }, headers)
-            }
-            if (response) {
-                setAddStoryInputValue('')
-                setAddStoryModal(!addStoryModal)
-                setIsEdit(false)
-                setIsLoading(false)
-                
+            if (addStoryFormData.images.length < 3) {
+                setErrorMsg((prevError) => ({ ...prevError, images: 'Min 3 Images Required' }))
+                return;
+            } else {
+                await createStory({ userId: user._id, ...addStoryFormData })
+                setAddStoryModal(false)
             }
         } catch (error) {
-            setIsLoading(false)
-            if (error.response.data.message) {
-                const errorMessage = error.response.data.message;
-                setError(errorMessage);
-            } else {
-                setError("An error occurred during Story add. Please try again.");
-                console.log("Error In Add Story:", error);
-            }
-        }
-    }
-
-    const handleAddStorySubmit = async (e) => {
-        e.preventDefault()
-        let error_msg = handleError()
-
-        if (error_msg) {
-            setError(error_msg)
-        } else {
-            setIsLoading(true)
-            setError(""); // Clear any previous error message
-            await fetchAddStory()
+            console.log(error);
         }
     }
 
@@ -123,63 +117,25 @@ function AddStory() {
 
                 <div className={style.slideWrapper}>
 
-                    {addStoryInputValue.images?.length === 0 && (
-                        <div className={`${style.slide} ${currentSlide === 1 && style.slideActive}`} >
-                            <h4>Slide 1</h4>
-                        </div>
-                    )}
+                    {addStoryFormData.images.length === 0 ?
+                        <Slide value={1} currentSlide={currentSlide} />
+                        :
+                        addStoryFormData.images.map((_, index) => {
+                            return <Slide key={index} value={index + 1} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} />
+                        })}
 
-                    {addStoryInputValue.images?.map((imageUrl, index) => (
-                        <div key={index} className={`${style.slide} ${currentSlide - 1 === index && style.slideActive}`} onClick={() => setCurrentSlide(index + 1)}>
-                            <h4>Slide {index + 1}</h4>
-                        </div>
-                    ))}
-
-                    {addStoryInputValue.images?.length < 6 && (
+                    {addStoryFormData.images.length < 6 && (
                         <div className={style.slide} onClick={handleAddMoreClick}>
                             <h4>Add more..</h4>
-                        </div>
-                    )}
+                        </div>)}
 
                 </div>
 
-                <form className={style.addStoryForm} onSubmit={handleAddStorySubmit}>
-
-                    <div className={style.heading}>
-                        <label htmlFor="heading">Heading :</label>
-                        <input type="text" placeholder="Your heading" name="heading" value={addStoryInputValue.heading} onChange={handleAddStoryInput} />
-                    </div>
-
-                    <div className={style.description}>
-                        <label htmlFor="description">Description :</label>
-                        <input type="text" placeholder="Story Description" name="description" value={addStoryInputValue.description} onChange={handleAddStoryInput} />
-                    </div>
-
-                    <div className={style.image} >
-                        <label htmlFor="image">Image :</label>
-                        <input type="text" placeholder="Add Image Url" name="images" value={addStoryInputValue?.images[currentSlide - 1] || ""} onChange={handleAddStoryInput} />
-                    </div>
-
-                    <div className={style.category}>
-                        <label htmlFor="category">Category :</label>
-
-                        <select name="category" onChange={handleAddStoryInput}>
-                            <option>Select Category</option>
-                            <option value="food" >Food</option>
-                            <option value="music">Music</option>
-                            <option value="nature">Nature</option>
-                            <option value="car">Car</option>
-                            <option value="flowers">Flower</option>
-                            <option value="anime">Anime</option>
-                            <option value="cartoon">Cartoon</option>
-                        </select>
-                    </div>
-
-                    {error && <p className={style.errorTag}>{error}</p>}
-
-                    <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`} disabled={isLoading}>
-                        {isLoading ? <p className={style.loadingSpinner}></p> : "Post"}</button>
-                </form>
+                <AddStoryForm addStoryFormData={addStoryFormData}
+                    setAddStoryFormData={setAddStoryFormData}
+                    handleAddStoryInput={handleAddStoryInput}
+                    errorMsg={errorMsg} setErrorMsg={setErrorMsg}
+                    isLoading={isLoading} currentSlide={currentSlide} handleSubmit={handleSubmit} />
 
                 <div className={style.prevnext}>
                     <button className={style.previousBtn} onClick={handlePreviousClick}>Previous</button>
@@ -192,18 +148,9 @@ function AddStory() {
             </div>
 
             <div className={style.closebtn}>
-                <input type="button" value="X" onClick={() => {
-                    setAddStoryModal(!addStoryModal)
-                    setIsEdit(false)
-                    setAddStoryInputValue({
-                        heading: '',
-                        description: '',
-                        category: '',
-                        images: [''], // Set the first image URL as an empty string
-                    });
-                }} />
+                <button onClick={handleCancel} >X</button>
 
-                {addStoryInputValue.images.length < 6 &&
+                {addStoryFormData.images.length < 6 &&
                     <p className={style.noteTitle}>Add upto 6 slides</p>
                 }
             </div>

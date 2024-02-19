@@ -38,7 +38,7 @@ function Homepage() {
             <Filter categories={categories} handleSelectedCategory={handleSelectedCategory} selectedCategory={selectedCategory} />
 
             {/* Loading css */}
-            {/* {categories.length == 0 &&
+            {categories.length == 0 &&
                 <div className={style.storyheadback}>
                     <div className={style.backback} />
                     <div className={style.storyContainerBack}>
@@ -47,8 +47,7 @@ function Homepage() {
                         ))}
                     </div>
                     <div className={style.backback} />
-                </div>
-            } */}
+                </div>}
 
             {getUserStories(user?._id).length > 0 && <StoryWrapper storyTitle={'Your Stories'} openViewStoryModal={openViewStoryModal} />}
 

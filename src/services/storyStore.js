@@ -35,6 +35,20 @@ const useStoryStore = create((set) => ({
     }
   },
 
+  createStory: async (formData) => {
+    try {
+      const response = await api.post("/api/story/add", {
+        ...formData,
+      });
+      const data = await response.data;
+      set((state) => ({
+        stories: [...state.stories, data],
+      }));
+    } catch (error) {
+      throw new Error(error.response.data.error || "Failed to create story");
+    }
+  },
+
   // get story by category - return category wise story
   getStoryByCategory: (category) => {
     return useStoryStore

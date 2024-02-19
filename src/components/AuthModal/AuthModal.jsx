@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import style from "./AuthModal.module.css";
 import useAuthStore from '../../services/authStore';
-import validateForm from '../../utils/validateForm';
+import validateAuthForm from '../../utils/validateAuthForm';
 import { UserContext } from '../../App';
 
 function AuthModal() {
@@ -23,7 +23,7 @@ function AuthModal() {
     // handle form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const errors = validateForm(formData)
+        const errors = validateAuthForm(formData)
 
         if (Object.keys(errors).length === 0) {
             setIsLoading(true)

@@ -1,4 +1,4 @@
-import React, { useState,  createContext } from "react";
+import React, { useState, createContext } from "react";
 import "./assets/Styles/global.css";
 import {
   BrowserRouter as Router,
@@ -11,23 +11,19 @@ import Header from "./components/Header/Header";
 import ModalWrapper from "./components/ModalWrapper/ModalWrapper";
 import Bookmark from "./pages/Bookmark/Bookmark";
 import ViewStory from "./components/ViewStory/ViewStory";
+import useAuthStore from "./services/authStore";
 
 export const UserContext = createContext();
 
 function App() {
-  const BASE_STORY_URL = `https://swiptory.up.railway.app/api/story`;
-
-  const [token, setToken] = useState("");
-  const [decode, setDecode] = useState({});
-
-  const headers = { headers: { Authorization: token } };
+  const { authToken } = useAuthStore();
 
   const [allUserStories, setAllUserStories] = useState([]); // all stories here
   const [filteredUserStories, setfilteredUserStories] = useState([]); // filter click story save here
 
   const [isAuthModal, setIsAuthModal] = useState(false);
   const [isAuthModalValue, setIsAuthModalValue] = useState("");
-  
+
   const [addStoryModal, setAddStoryModal] = useState(false);
   const [viewStoryModal, setViewStoryModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,14 +52,6 @@ function App() {
     <div className="App">
       <UserContext.Provider
         value={{
-          BASE_STORY_URL,
-          headers,
-          inputValue,
-          setInputValue,
-          token,
-          setToken,
-          decode,
-          setDecode,
           allUserStories,
           setAllUserStories,
           isAuthModal,
@@ -97,7 +85,7 @@ function App() {
             <Route
               exact
               path="/bookmark"
-              element={token ? <Bookmark /> : <Navigate to={"/homepage"} />}
+              element={authToken ? <Bookmark /> : <Navigate to={"/homepage"} />}
             />
           </Routes>
           {isAuthModal && <ModalWrapper />}

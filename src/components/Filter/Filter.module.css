@@ -19,15 +19,18 @@
     border-radius: 30px;
 }
 
+/* filter loading */
 .filterTagBack {
     border-radius: 30px;
     background-color: rgb(236, 231, 231);
 }
 
 .filterTagBack img {
-    max-width: 160px;
+    max-width: 163px;
     opacity: 0;
 }
+
+/* ----------- */
 
 .filterTag img {
     max-width: 160px;
@@ -62,6 +65,7 @@
         border-radius: 20px;
     }
 
+    /* loading */
     .filterTagBack {
         border-radius: 20px;
         background-color: rgb(236, 231, 231);
@@ -72,6 +76,7 @@
         opacity: 0;
     }
 
+    /* ------- */
     .filterTag h2 {
         font-size: .95rem;
     }
