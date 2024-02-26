@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import style from "./Header.module.css";
-import useAuthStore from "../../services/authStore";
+import useAuthStore from "../../store/authStore";
 import { HiMenu } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 import { BsFillBookmarkFill } from "react-icons/bs";

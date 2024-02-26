@@ -11,7 +11,7 @@ import Header from "./components/Header/Header";
 import ModalWrapper from "./components/ModalWrapper/ModalWrapper";
 import Bookmark from "./pages/Bookmark/Bookmark";
 import ViewStory from "./components/ViewStory/ViewStory";
-import useAuthStore from "./services/authStore";
+import useAuthStore from "./store/authStore";
 
 export const UserContext = createContext();
 
@@ -28,25 +28,10 @@ function App() {
   const [viewStoryModal, setViewStoryModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isEdit, setIsEdit] = useState(false); // Edit button
+  const [isUpdate, setIsUpdate] = useState(false); // Edit button
 
   const [selectedStoryCatArray, setSelectedStoryCatArray] = useState(); // selected story with category all stories in array of object's
   const [selectedStoryCatIndex, setSelectedStoryCatIndex] = useState(0); // selected story ( index ) with category all stories in array of object's
-
-  const [inputValue, setInputValue] = useState({ username: "", password: "" });
-
-  const [addStoryInputValue, setAddStoryInputValue] = useState({
-    heading: "",
-    description: "",
-    category: "",
-    images: [],
-  });
-
-  // function for updating values - on edit btn click
-  const updateEditStoryInputValue = (newValues) => {
-    setAddStoryInputValue((prevValues) => ({ ...prevValues, ...newValues }));
-    setIsEdit(!isEdit);
-  };
 
   return (
     <div className="App">
@@ -68,13 +53,13 @@ function App() {
           setSelectedStoryCatArray,
           selectedStoryCatIndex,
           setSelectedStoryCatIndex,
-          addStoryInputValue,
-          setAddStoryInputValue,
+          // addStoryInputValue,
+          // setAddStoryInputValue,
           filteredUserStories,
           setfilteredUserStories,
-          updateEditStoryInputValue,
-          isEdit,
-          setIsEdit,
+          // updateEditStoryInputValue,
+          isUpdate,
+          setIsUpdate,
         }}
       >
         <Router>

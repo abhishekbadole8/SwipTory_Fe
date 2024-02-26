@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import api from "./api";
+import api from "../services/api";
 import jwt_decode  from "jwt-decode";
 
 // Create a Zustand store for authentication state

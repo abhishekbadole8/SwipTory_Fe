@@ -1,17 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import style from "./Bookmark.module.css";
-import Story from "../../components/Story/Story";
 import { UserContext } from "../../App";
 import { useLocation } from "react-router-dom";
+import StoryWrapper from "../../components/StoryWrapper/StoryWrapper";
 
 function Bookmark() {
     const location = useLocation()
 
-    const { allUserStories, decode, viewStoryModal, setViewStoryModal, setSelectedStoryCatArray, setSelectedStoryCatIndex } = useContext(UserContext)
+    const { viewStoryModal, setViewStoryModal, setSelectedStoryCatArray, setSelectedStoryCatIndex } = useContext(UserContext)
 
     const [bookmark, setBookmark] = useState(false)
-
-    const userBookmarks = allUserStories.filter(story => story.bookmarks.includes(decode?.user?._id))
 
     const openViewStoryModal = (story, index) => {
         setSelectedStoryCatArray(story) // seting array of objects of all stories of that categpry
@@ -20,14 +18,12 @@ function Bookmark() {
     }
 
     useEffect(() => {
-        if (location.pathname === '/bookmark') {
-            setBookmark(!bookmark)
-        }
+        if (location.pathname === '/bookmark') setBookmark(!bookmark)
     }, [location.pathname])
 
     return (
         <div className={style.bookmark}>
-            <Story bookmark={bookmark} userBookmarks={userBookmarks} onClick={(categoryStories, ind) => openViewStoryModal(categoryStories, ind)} />
+            <StoryWrapper storyTitle={'Your Bookmarks'} bookmark={bookmark} />
         </div>
     )
 }

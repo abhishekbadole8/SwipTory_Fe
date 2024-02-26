@@ -4,31 +4,20 @@ import { UserContext } from "../../App";
 import Slide from "./Slide";
 import AddStoryForm from "./AddStoryForm";
 import validateAddStoryForm from "../../utils/validateAddStoryForm";
-import useStoryStore from "../../services/storyStore";
-import useAuthStore from "../../services/authStore";
+import useStoryStore from "../../store/storyStore";
+import useAuthStore from "../../store/authStore";
 
 function AddStory() {
 
-    const { addStoryModal, setAddStoryModal, isEdit, setIsEdit } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, isUpdate, setIsUpdate } = useContext(UserContext)
 
-    const { createStory } = useStoryStore()
+    const { getStories, createStory, updateStoryInputValue, setUpdateStoryInputValue, updateStory } = useStoryStore()
+
     const { user } = useAuthStore()
 
-    const [addStoryFormData, setAddStoryFormData] = useState({
-        heading: "",
-        description: "",
-        category: "",
-        images: []
-    });
-    // const [images, setImages] = useState([])
-
+    const [addStoryFormData, setAddStoryFormData] = useState({ heading: "", description: "", category: "", images: [] });
     const [currentSlide, setCurrentSlide] = useState(1)
-    const [errorMsg, setErrorMsg] = useState({
-        heading: "",
-        description: "",
-        category: "",
-        images: "",
-    })
+    const [errorMsg, setErrorMsg] = useState({ heading: "", description: "", category: "", images: "", })
     const [isLoading, setIsLoading] = useState(false)
 
     // handle input chnages 
@@ -76,24 +65,32 @@ function AddStory() {
         }
     }
 
+    // handle previus button click
     const handlePreviousClick = () => {
         if (currentSlide > 1) {
             setCurrentSlide(prevSlide => prevSlide - 1)
         }
     }
 
-    // handle cancel
+    // Handle close modal
     const handleCancel = () => {
         setAddStoryModal(!addStoryModal)
-        setIsEdit(false)
+        setIsUpdate(false)
         setAddStoryFormData({
             heading: '',
             description: '',
             category: '',
             images: [''], // Set the first image URL as an empty string
         });
+        setUpdateStoryInputValue({
+            heading: '',
+            description: '',
+            category: '',
+            images: [''],
+        })
     }
 
+    // handle app story & update story
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -101,13 +98,24 @@ function AddStory() {
                 setErrorMsg((prevError) => ({ ...prevError, images: 'Min 3 Images Required' }))
                 return;
             } else {
-                await createStory({ userId: user._id, ...addStoryFormData })
-                setAddStoryModal(false)
+                if (isUpdate) {
+                    await updateStory({ ...addStoryFormData, action: 'updateStoryDetails' })
+                    getStories()
+                } else {
+                    await createStory({ userId: user._id, ...addStoryFormData })
+                }
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setAddStoryModal(false)
+            setIsUpdate(false)
         }
     }
+
+    useEffect(() => {
+        setAddStoryFormData(prev => ({ ...prev, ...updateStoryInputValue }))
+    }, [])
 
     return (
         <div className={style.addStoryContainer}>
@@ -135,7 +143,8 @@ function AddStory() {
                     setAddStoryFormData={setAddStoryFormData}
                     handleAddStoryInput={handleAddStoryInput}
                     errorMsg={errorMsg} setErrorMsg={setErrorMsg}
-                    isLoading={isLoading} currentSlide={currentSlide} handleSubmit={handleSubmit} />
+                    isLoading={isLoading} currentSlide={currentSlide}
+                    handleSubmit={handleSubmit} isUpdate={isUpdate} />
 
                 <div className={style.prevnext}>
                     <button className={style.previousBtn} onClick={handlePreviousClick}>Previous</button>

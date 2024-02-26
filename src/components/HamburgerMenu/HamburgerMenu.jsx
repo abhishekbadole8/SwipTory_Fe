@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaUserCircle } from "react-icons/fa";
 import { useContext } from 'react';
 import { UserContext } from '../../App';
-import useAuthStore from "../../services/authStore";
+import useAuthStore from "../../store/authStore";
 
 function HamburgerMenu({ setHamburger, handleLogout }) {
 

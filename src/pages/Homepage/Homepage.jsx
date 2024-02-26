@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import Filter from "../../components/Filter/Filter";
 import style from "./Homepage.module.css"
-import useStoryStore from "../../services/storyStore";
-import useAuthStore from "../../services/authStore";
+import useStoryStore from "../../store/storyStore";
+import useAuthStore from "../../store/authStore";
 import StoryWrapper from "../../components/StoryWrapper/StoryWrapper";
 
 function Homepage() {
@@ -49,7 +49,7 @@ function Homepage() {
                     <div className={style.backback} />
                 </div>}
 
-            {getUserStories(user?._id).length > 0 && <StoryWrapper storyTitle={'Your Stories'} openViewStoryModal={openViewStoryModal} />}
+            {getUserStories().length > 0 && <StoryWrapper storyTitle={'Your Stories'} openViewStoryModal={openViewStoryModal} />}
 
             {selectedCategory === "" ?
                 (categories.map((category, index) => (

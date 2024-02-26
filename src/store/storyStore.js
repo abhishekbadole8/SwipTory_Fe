@@ -1,10 +1,19 @@
-const { create } = require("zustand");
-const { default: api } = require("./api");
+import { create } from "zustand";
+import api from "../services/api";
+import useAuthStore from "./authStore";
 
 const useStoryStore = create((set) => ({
   stories: [],
   story: null,
   categories: [],
+  updateStoryInputValue: {
+    action: "updateStoryDetails",
+    _id: "",
+    heading: "",
+    description: "",
+    category: "",
+    images: [],
+  },
 
   // get stories - public
   getStories: async () => {
@@ -35,6 +44,7 @@ const useStoryStore = create((set) => ({
     }
   },
 
+  // create new story - private
   createStory: async (formData) => {
     try {
       const response = await api.post("/api/story/add", {
@@ -49,6 +59,24 @@ const useStoryStore = create((set) => ({
     }
   },
 
+  // update story - private
+  updateStory: async (formData) => {
+    try {
+      const userId = useAuthStore.getState().user._id;
+      const storyId = useStoryStore.getState().updateStoryInputValue._id;
+      const response = await api.patch(
+        `/api/story/update/${userId}/${storyId}`,
+        {
+          ...formData,
+        }
+      );
+      console.log(response);
+      return true;
+    } catch (error) {
+      throw new Error(error.response.data.error || "Failed to update story");
+    }
+  },
+
   // get story by category - return category wise story
   getStoryByCategory: (category) => {
     return useStoryStore
@@ -57,10 +85,33 @@ const useStoryStore = create((set) => ({
   },
 
   // return only user stories
-  getUserStories: (id) => {
+  getUserStories: () => {
+    const _id = useAuthStore.getState().user?._id;
     return useStoryStore
       .getState()
-      .stories.filter((story) => story.userId === id);
+      .stories.filter((story) => story.userId === _id);
+  },
+
+  // return user bokmarked stories
+  getUserBookmarkedStories: () => {
+    const userId = useAuthStore.getState().user._id;
+    return useStoryStore
+      .getState()
+      .stories.filter((story) => story.bookmarks.includes(userId));
+  },
+
+  // updatestoryinput values when edit button is clicked
+  setUpdateStoryInputValue: (story) => {
+    set((state) => ({
+      ...state,
+      updateStoryInputValue: {
+        _id: story._id,
+        heading: story.heading,
+        description: story.description,
+        category: story.category,
+        images: story.images,
+      },
+    }));
   },
 }));
 

@@ -1,10 +1,11 @@
 .bookmark {
-    padding: 1.35rem 1.75rem;
+    padding: 1.35rem 2.75rem;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
 }
 
 @media screen and (max-width:750px){
     .bookmark {
         padding: 1rem;
-    }
-    
+    }    
 }

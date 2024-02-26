@@ -1,6 +1,6 @@
 import style from "./AddStory.module.css";
 
-function AddStoryForm({ addStoryFormData, handleAddStoryInput, errorMsg, currentSlide, isLoading, handleSubmit}) {
+function AddStoryForm({ addStoryFormData, handleAddStoryInput, errorMsg, currentSlide, isLoading, handleSubmit, isUpdate }) {
 
     return (
         <div>
@@ -40,9 +40,8 @@ function AddStoryForm({ addStoryFormData, handleAddStoryInput, errorMsg, current
                     {errorMsg.category && <span className={style.errorTag}>{errorMsg.category}</span>}
                 </div>
 
-
                 <button type="submit" className={`${style.authSubmitBtn} ${isLoading && style.authSubmitBtnDisable}`}>
-                    {isLoading ? <p className={style.loadingSpinner}></p> : "Post"}</button>
+                    {isLoading ? 'Loading...' : isUpdate ? 'Update' : 'Post'}</button>
             </form>
         </div>
     )

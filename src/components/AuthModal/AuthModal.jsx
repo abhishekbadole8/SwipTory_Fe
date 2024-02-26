@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import style from "./AuthModal.module.css";
-import useAuthStore from '../../services/authStore';
+import useAuthStore from '../../store/authStore';
 import validateAuthForm from '../../utils/validateAuthForm';
 import { UserContext } from '../../App';
 

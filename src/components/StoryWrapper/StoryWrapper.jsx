@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
 import style from "./StoryWrapper.module.css";
 import Story from '../Story/Story';
-import useAuthStore from '../../services/authStore';
-import useStoryStore from '../../services/storyStore';
+import useAuthStore from '../../store/authStore';
+import useStoryStore from '../../store/storyStore';
 
-function StoryWrapper({ storyTitle, openViewStoryModal, category }) {
+function StoryWrapper({ storyTitle, openViewStoryModal, category, bookmark }) {
 
-    const { user } = useAuthStore()
+    // const { user } = useAuthStore()
 
-    const { getUserStories, getStoryByCategory } = useStoryStore()
+    const { getUserStories, getStoryByCategory, getUserBookmarkedStories } = useStoryStore()
 
     return (
         <div className={style.storyhead} >
@@ -17,8 +16,8 @@ function StoryWrapper({ storyTitle, openViewStoryModal, category }) {
 
             <div className={style.storyWrapper}>
 
-                {storyTitle ? (
-                    getUserStories(user?._id).map((story, index) => (
+                {!bookmark && storyTitle ? (
+                    getUserStories().map((story, index) => (
                         <Story key={index} story={story} storyTitle={storyTitle} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
                     ))
                 ) : (
@@ -26,6 +25,11 @@ function StoryWrapper({ storyTitle, openViewStoryModal, category }) {
                         <Story key={index} story={story} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
                     ))
                 )}
+
+                {bookmark && (
+                    getUserBookmarkedStories().map((story, index) => (
+                        <Story key={index} story={story} />
+                    )))}
 
             </div>
 

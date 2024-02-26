@@ -3,26 +3,23 @@ import axios from "axios";
 import style from "./Story.module.css";
 import { UserContext } from "../../App";
 import { TbEdit } from "react-icons/tb";
+import useStoryStore from "../../store/storyStore";
 
 function Story({ story, onClick, storyTitle }) {
 
     const storyWrapperRef = useRef()
+    const { setUpdateStoryInputValue } = useStoryStore()
 
-    const { addStoryModal, setAddStoryModal, updateEditStoryInputValue, } = useContext(UserContext)
+    const { addStoryModal, setAddStoryModal, isUpdate, setIsUpdate, } = useContext(UserContext)
+
 
     const { _id, images, heading, description } = story;
 
-    // handle edit button
-    const handleEditButtonClick = (e, singleStory) => {
+    const handleUpdateButtonClick = (e, story) => {
         e.stopPropagation()
-        updateEditStoryInputValue({
-            storyId: singleStory._id,
-            heading: singleStory.heading,
-            description: singleStory.description,
-            category: singleStory.category,
-            images: singleStory.images,
-        })
-        setAddStoryModal(!addStoryModal)
+        setIsUpdate(true)
+        setAddStoryModal(true)
+        setUpdateStoryInputValue(story)
     }
 
     return (
@@ -42,7 +39,7 @@ function Story({ story, onClick, storyTitle }) {
                     </div>
 
                     {storyTitle &&
-                        (<div className={style.editButton} onClick={(e) => handleEditButtonClick(e, story)}>
+                        (<div className={style.editButton} onClick={(e) => handleUpdateButtonClick(e, story)}>
                             <button><TbEdit size={18} />Edit</button>
                         </div>)}
                 </div>
