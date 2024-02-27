@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import api from "../services/api";
 import useAuthStore from "./authStore";
 
@@ -14,6 +14,7 @@ const useStoryStore = create((set) => ({
     category: "",
     images: [],
   },
+  user: useAuthStore.getState().user,
 
   // get stories - public
   getStories: async () => {
@@ -70,8 +71,23 @@ const useStoryStore = create((set) => ({
           ...formData,
         }
       );
-      console.log(response);
       return true;
+    } catch (error) {
+      throw new Error(error.response.data.error || "Failed to update story");
+    }
+  },
+
+  updateBookmarkOrLike: async (action, storyId) => {
+    try {
+      const userId = useAuthStore.getState().user._id;
+      const response = await api.patch(
+        `/api/story/update/${userId}/${storyId}`,
+        {
+          action,
+        }
+      );
+      const data = response.data;
+      return data;
     } catch (error) {
       throw new Error(error.response.data.error || "Failed to update story");
     }
@@ -94,7 +110,7 @@ const useStoryStore = create((set) => ({
 
   // return user bokmarked stories
   getUserBookmarkedStories: () => {
-    const userId = useAuthStore.getState().user._id;
+    const userId = useAuthStore.getState().user?._id;
     return useStoryStore
       .getState()
       .stories.filter((story) => story.bookmarks.includes(userId));

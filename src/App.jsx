@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState,useEffect, createContext } from "react";
 import "./assets/Styles/global.css";
 import {
   BrowserRouter as Router,
@@ -12,14 +12,13 @@ import ModalWrapper from "./components/ModalWrapper/ModalWrapper";
 import Bookmark from "./pages/Bookmark/Bookmark";
 import ViewStory from "./components/ViewStory/ViewStory";
 import useAuthStore from "./store/authStore";
+import useStoryStore from "./store/storyStore";
 
 export const UserContext = createContext();
 
 function App() {
   const { authToken } = useAuthStore();
-
-  const [allUserStories, setAllUserStories] = useState([]); // all stories here
-  const [filteredUserStories, setfilteredUserStories] = useState([]); // filter click story save here
+  const { getStories } = useStoryStore()
 
   const [isAuthModal, setIsAuthModal] = useState(false);
   const [isAuthModalValue, setIsAuthModalValue] = useState("");
@@ -30,15 +29,17 @@ function App() {
 
   const [isUpdate, setIsUpdate] = useState(false); // Edit button
 
-  const [selectedStoryCatArray, setSelectedStoryCatArray] = useState(); // selected story with category all stories in array of object's
-  const [selectedStoryCatIndex, setSelectedStoryCatIndex] = useState(0); // selected story ( index ) with category all stories in array of object's
+  const [selectedStoryCategoryArray, setSelectedStoryCategoryArray] = useState([]); // selected story with category all stories in array of object's
+  const [selectedStoryCategoryIndex, setSelectedStoryCategoryIndex] = useState(0); // selected story ( index ) with category all stories in array of object's
+
+  useEffect(() => {
+    getStories()
+  }, [])
 
   return (
     <div className="App">
       <UserContext.Provider
         value={{
-          allUserStories,
-          setAllUserStories,
           isAuthModal,
           setIsAuthModal,
           isAuthModalValue,
@@ -49,15 +50,10 @@ function App() {
           setIsLoading,
           viewStoryModal,
           setViewStoryModal,
-          selectedStoryCatArray,
-          setSelectedStoryCatArray,
-          selectedStoryCatIndex,
-          setSelectedStoryCatIndex,
-          // addStoryInputValue,
-          // setAddStoryInputValue,
-          filteredUserStories,
-          setfilteredUserStories,
-          // updateEditStoryInputValue,
+          selectedStoryCategoryArray,
+          setSelectedStoryCategoryArray,
+          selectedStoryCategoryIndex,
+          setSelectedStoryCategoryIndex,
           isUpdate,
           setIsUpdate,
         }}

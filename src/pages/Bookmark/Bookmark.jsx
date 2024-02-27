@@ -3,9 +3,12 @@ import style from "./Bookmark.module.css";
 import { UserContext } from "../../App";
 import { useLocation } from "react-router-dom";
 import StoryWrapper from "../../components/StoryWrapper/StoryWrapper";
+import useStoryStore from "../../store/storyStore";
 
 function Bookmark() {
     const location = useLocation()
+    
+    const { getStories } = useStoryStore()
 
     const { viewStoryModal, setViewStoryModal, setSelectedStoryCatArray, setSelectedStoryCatIndex } = useContext(UserContext)
 
@@ -20,6 +23,10 @@ function Bookmark() {
     useEffect(() => {
         if (location.pathname === '/bookmark') setBookmark(!bookmark)
     }, [location.pathname])
+
+    useEffect(() => {
+        getStories()
+    }, [])
 
     return (
         <div className={style.bookmark}>

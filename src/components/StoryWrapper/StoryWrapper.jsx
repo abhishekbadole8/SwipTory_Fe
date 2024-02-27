@@ -1,13 +1,34 @@
 import style from "./StoryWrapper.module.css";
 import Story from '../Story/Story';
-import useAuthStore from '../../store/authStore';
 import useStoryStore from '../../store/storyStore';
+import { useContext, useEffect } from "react";
+import { UserContext } from "../../App";
 
-function StoryWrapper({ storyTitle, openViewStoryModal, category, bookmark }) {
+function StoryWrapper({ storyTitle, category, bookmark }) {
 
-    // const { user } = useAuthStore()
+    const { setViewStoryModal, setSelectedStoryCategoryArray, setSelectedStoryCategoryIndex } = useContext(UserContext)
 
-    const { getUserStories, getStoryByCategory, getUserBookmarkedStories } = useStoryStore()
+
+    const { getUserStories, getStoryByCategory, getUserBookmarkedStories } = useStoryStore() // story store
+
+    const handleCategoryClick = (selectedCategory, index) => {
+        // here story title is Your Stories - title
+        if (storyTitle === 'Your Bookmarks' ) {
+            setSelectedStoryCategoryIndex(index)
+            setSelectedStoryCategoryArray(getUserBookmarkedStories())
+            console.log('your bookmark');
+        }
+        else if (storyTitle === 'Your Stories') {
+            setSelectedStoryCategoryArray(getUserStories())
+            setSelectedStoryCategoryIndex(index)
+            console.log('your stories');
+        } else {
+            console.log('else');
+            setSelectedStoryCategoryArray(getStoryByCategory(selectedCategory))
+            setSelectedStoryCategoryIndex(index)
+        }
+        setViewStoryModal(true)
+    }
 
     return (
         <div className={style.storyhead} >
@@ -18,17 +39,17 @@ function StoryWrapper({ storyTitle, openViewStoryModal, category, bookmark }) {
 
                 {!bookmark && storyTitle ? (
                     getUserStories().map((story, index) => (
-                        <Story key={index} story={story} storyTitle={storyTitle} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
+                        <Story key={index} index={index} story={story} storyTitle={storyTitle} handleCategoryClick={handleCategoryClick} />
                     ))
                 ) : (
                     getStoryByCategory(category).map((story, index) => (
-                        <Story key={index} story={story} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
+                        <Story key={index} index={index} story={story} handleCategoryClick={handleCategoryClick} />
                     ))
                 )}
 
                 {bookmark && (
                     getUserBookmarkedStories().map((story, index) => (
-                        <Story key={index} story={story} />
+                        <Story key={index} index={index} story={story} handleCategoryClick={handleCategoryClick} />
                     )))}
 
             </div>

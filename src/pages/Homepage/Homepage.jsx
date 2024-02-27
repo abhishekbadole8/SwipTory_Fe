@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../App";
+import { useEffect, useState } from "react";
 import Filter from "../../components/Filter/Filter";
 import style from "./Homepage.module.css"
 import useStoryStore from "../../store/storyStore";
@@ -10,17 +9,9 @@ function Homepage() {
 
     const { getStories, categories, getUserStories } = useStoryStore(); // story store
 
-    const { user, authToken, setUserFromToken } = useAuthStore() //  auth store
-
-    const { viewStoryModal, setViewStoryModal, setSelectedStoryCatArray, setSelectedStoryCatIndex } = useContext(UserContext)
+    const { authToken, setUserFromToken } = useAuthStore() //  auth store
 
     const [selectedCategory, setSelectedCategory] = useState("");
-
-    const openViewStoryModal = (story, index) => {
-        setSelectedStoryCatArray(story) // seting array of objects of all stories of that categpry
-        setSelectedStoryCatIndex(index) // setting cat array index 
-        setViewStoryModal(!viewStoryModal) // View Story Modal Open
-    }
 
     // handle if clicked On filter 
     const handleSelectedCategory = (category) => {
@@ -31,7 +22,7 @@ function Homepage() {
         getStories()
         setUserFromToken(authToken)
     }, [authToken])
-
+console.log(getUserStories().length >0);
     return (
         <div className={style.homepage} >
 
@@ -49,19 +40,14 @@ function Homepage() {
                     <div className={style.backback} />
                 </div>}
 
-            {getUserStories().length > 0 && <StoryWrapper storyTitle={'Your Stories'} openViewStoryModal={openViewStoryModal} />}
+            {getUserStories().length > 0 &&
+                <StoryWrapper storyTitle={'Your Stories'} />}
 
             {selectedCategory === "" ?
-                (categories.map((category, index) => (
-                    <StoryWrapper key={index} category={category} openViewStoryModal={openViewStoryModal} />
-                )))
-                :
+                (categories.map((category, index) => (<StoryWrapper key={index} category={category} />))) :
                 (categories
                     .filter(category => category === selectedCategory)
-                    .map((category, index) => (
-                        <StoryWrapper key={index} category={category} onClick={(categoryStories, index) => openViewStoryModal(categoryStories, index)} />
-                    )))}
-
+                    .map((category, index) => (<StoryWrapper key={index} category={category} />)))}
         </div >
     )
 }

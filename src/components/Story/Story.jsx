@@ -1,19 +1,20 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import axios from "axios";
 import style from "./Story.module.css";
 import { UserContext } from "../../App";
 import { TbEdit } from "react-icons/tb";
 import useStoryStore from "../../store/storyStore";
 
-function Story({ story, onClick, storyTitle }) {
+function Story({ story, storyTitle, handleCategoryClick, index }) {
 
     const storyWrapperRef = useRef()
+
     const { setUpdateStoryInputValue } = useStoryStore()
 
-    const { addStoryModal, setAddStoryModal, isUpdate, setIsUpdate, } = useContext(UserContext)
+    const { setAddStoryModal, setIsUpdate, } = useContext(UserContext)
 
 
-    const { _id, images, heading, description } = story;
+    const { images, heading, description, category } = story;
 
     const handleUpdateButtonClick = (e, story) => {
         e.stopPropagation()
@@ -26,8 +27,8 @@ function Story({ story, onClick, storyTitle }) {
         <>
             <div className={style.storyWrapper} ref={storyWrapperRef}>
 
-                <div className={style.parentDiv} >
-                    <div className={style.story} onClick={() => onClick(story)}>
+                <div className={style.parentDiv} onClick={() => handleCategoryClick(category, index)}>
+                    <div className={style.story} >
                         <div className={style.shadeTop} />
                         <img src={images[0]} alt="story" />
                         <div className={style.shadeBottom} />
