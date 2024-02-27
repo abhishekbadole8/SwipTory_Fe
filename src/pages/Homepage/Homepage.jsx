@@ -22,7 +22,7 @@ function Homepage() {
         getStories()
         setUserFromToken(authToken)
     }, [authToken])
-console.log(getUserStories().length >0);
+
     return (
         <div className={style.homepage} >
 

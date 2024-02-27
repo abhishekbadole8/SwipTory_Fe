@@ -2,19 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import style from "./ViewStory.module.css";
-import { BsFillBookmarkFill } from "react-icons/bs";
-import { AiFillHeart } from "react-icons/ai";
 import { LuSend } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { useSwipeable } from 'react-swipeable';
 import useAuthStore from "../../store/authStore";
+import ViewStoryContent from "./ViewStoryContent";
+import Bars from "./Bars";
+import ImageContainer from "./ImageContainer";
 
 function ViewStory() {
 
-    const { setIsAuthModal, viewStoryModal,setIsAuthModalValue, setViewStoryModal, selectedStoryCategoryArray,
-        setSelectedStoryCategoryArray, selectedStoryCategoryIndex, BASE_STORY_URL, headers } = useContext(UserContext)
+    const { setIsAuthModal, viewStoryModal, setIsAuthModalValue, setViewStoryModal, selectedStoryCategoryArray,
+        setSelectedStoryCategoryArray, selectedStoryCategoryIndex } = useContext(UserContext)
 
-    const { user,isAuthenticated } = useAuthStore()
+    const { user, isAuthenticated } = useAuthStore()
 
     const [progess, setProgress] = useState(0)
 
@@ -80,7 +81,7 @@ function ViewStory() {
         },
     });
 
-    const fetchBookmarkOrLike = async (action) => {
+    const updateBookmarkOrLike = async (action) => {
         if (!isAuthenticated()) {
             setIsAuthModal(true)
             setIsAuthModalValue('Login')
@@ -90,7 +91,7 @@ function ViewStory() {
         try {
             let response;
             if (action === "updateBookmarks" || action === "updateLikes") {
-                response = await axios.patch('http://localhost:5000/api/story/update/' + user?._id + '/' + currentStory?._id, { action }, {
+                response = await axios.patch('https://swiptory.up.railway.app/api/story/update/' + user?._id + '/' + currentStory?._id, { action }, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
                     }
@@ -109,22 +110,22 @@ function ViewStory() {
         }
     }
 
-    // const handleShare = async () => {
-    //     if (navigator.share) {
-    //         try {
-    //             await navigator.share({
-    //                 title: currentStory.heading,
-    //                 text: currentStory.description,
-    //                 url: currentStory.images[currentImageIndex]
-    //             });
-    //             console.log("Shared successfully");
-    //         } catch (error) {
-    //             console.error("Error sharing:", error);
-    //         }
-    //     } else {
-    //         console.log("Error in share");
-    //     }
-    // };
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: currentStory.heading,
+                    text: currentStory.description,
+                    url: currentStory.images[currentImageIndex]
+                });
+                console.log("Shared successfully");
+            } catch (error) {
+                console.error("Error sharing:", error);
+            }
+        } else {
+            console.log("Error in share");
+        }
+    };
 
     //SetInterval for auto chnage slide
     useEffect(() => {
@@ -152,25 +153,14 @@ function ViewStory() {
 
                 <div className={style.viewStoryImageCont}>
 
-                    <div className={style.viewStoryInner}>
-                        <div className={style.shadeTop} />
-                        <img src={currentStory?.images[currentImageIndex]} alt="story" />
-                        <div className={style.shadeBottom} />
-                    </div>
+                    <ImageContainer imageUrl={currentStory?.images[currentImageIndex]}/>
 
                     <div className={style.viewStoryOuter}>
 
                         <div className={style.viewStoryUpper}>
 
                             {/* horizontal - bars */}
-                            <div className={style.storyBar}>
-                                {currentStory.images.map((_, i) => {
-                                    return (
-                                        <div className={style.storyBarWrapper} key={i} >
-                                            <div className={`${style.barInner}  ${!(i < currentImageIndex + 1) ? style.barInner : style.barOuter}`} />
-                                        </div>)
-                                })}
-                            </div>
+                            <Bars imagesCount={currentStory.images} currentImageIndex={currentImageIndex}/>
 
                             <div className={style.sendStoryBtn}>
                                 <RxCross2 color="white" id={style.icon} size={24} onClick={() => setViewStoryModal(!viewStoryModal)} />
@@ -179,27 +169,11 @@ function ViewStory() {
 
                         </div>
 
-                        <div className={style.viewStoryBottom}>
-                            <div className={style.storyContent}>
-                                <h6>{currentStory.heading}</h6>
-                                <p>{currentStory.description}</p>
-                            </div>
-
-                            <div className={style.bookmarkLikeBtn}>
-
-                                {/* Bookmark button*/}
-                                <div onClick={() => fetchBookmarkOrLike('updateBookmarks')}>
-                                    <BsFillBookmarkFill color={currentStory?.bookmarks.includes(user?._id) ? "#085CFF" : "white"} id={style.icon} size={22} />
-                                </div>
-
-                                {/* Like button*/}
-                                <div onClick={() => fetchBookmarkOrLike('updateLikes')}                                >
-                                    <AiFillHeart color={currentStory.likes.includes(user?._id) ? 'red' : "white"} id={style.icon} size={27} />
-                                    <span>{currentStory.likes.length}</span>
-                                </div>
-
-                            </div>
-                        </div>
+                        <ViewStoryContent updateBookmarkOrLike={updateBookmarkOrLike}
+                            heading={currentStory?.heading} description={currentStory?.description}
+                            isBookmarked={currentStory?.bookmarks.includes(user?._id)}
+                            isLiked={currentStory?.likes.includes(user?._id)}
+                            likesCount={currentStory.likes.length} />
 
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import axios from "axios";
 import useAuthStore from "../store/authStore";
 
 // Base URL of the backend API
-const baseURL = `http://localhost:5000`;
+const baseURL = `https://swiptory.up.railway.app`;
 
 const api = axios.create({
   baseURL,

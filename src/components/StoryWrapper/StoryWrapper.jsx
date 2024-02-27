@@ -1,13 +1,12 @@
 import style from "./StoryWrapper.module.css";
 import Story from '../Story/Story';
 import useStoryStore from '../../store/storyStore';
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../../App";
 
 function StoryWrapper({ storyTitle, category, bookmark }) {
 
     const { setViewStoryModal, setSelectedStoryCategoryArray, setSelectedStoryCategoryIndex } = useContext(UserContext)
-
 
     const { getUserStories, getStoryByCategory, getUserBookmarkedStories } = useStoryStore() // story store
 
@@ -16,14 +15,11 @@ function StoryWrapper({ storyTitle, category, bookmark }) {
         if (storyTitle === 'Your Bookmarks' ) {
             setSelectedStoryCategoryIndex(index)
             setSelectedStoryCategoryArray(getUserBookmarkedStories())
-            console.log('your bookmark');
         }
         else if (storyTitle === 'Your Stories') {
             setSelectedStoryCategoryArray(getUserStories())
             setSelectedStoryCategoryIndex(index)
-            console.log('your stories');
         } else {
-            console.log('else');
             setSelectedStoryCategoryArray(getStoryByCategory(selectedCategory))
             setSelectedStoryCategoryIndex(index)
         }
