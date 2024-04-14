@@ -2,7 +2,7 @@ import axios from "axios";
 import useAuthStore from "../store/authStore";
 
 // Base URL of the backend API
-const baseURL = `https://swiptory.up.railway.app`;
+const baseURL = `https://swipstory.onrender.com`;
 
 const api = axios.create({
   baseURL,
