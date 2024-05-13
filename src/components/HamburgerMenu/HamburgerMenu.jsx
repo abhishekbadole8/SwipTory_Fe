@@ -19,7 +19,7 @@ function HamburgerMenu({ setHamburger, handleLogout }) {
             <div className={style.menuProfile}>
                 <div>
                     <FaUserCircle size={30}/>
-                    <h3>{user.username}</h3>
+                    <h3>{user?.username}</h3>
                     <RxCross2 size={25} onClick={() => setHamburger(prev => !prev)} className={style.crossIcon} />
                 </div>
                 <div className={style.menuProfileLogout}>
