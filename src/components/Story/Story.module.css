@@ -1,4 +1,3 @@
-
 .storyContainer {
     padding: 1rem 0 0 0;
     font-family: 'DM Sans', sans-serif;
@@ -110,6 +109,9 @@
 }
 
 @media screen and (max-width:750px) {
+    .storyWrapper {
+        width: 100%;
+    }
 
     .storyWrapper,
     .bookmarkStoryWrapper {
