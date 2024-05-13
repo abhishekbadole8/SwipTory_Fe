@@ -5,7 +5,7 @@ function Filter({ handleSelectedCategory, selectedCategory, categories }) {
 
     return (
         <div className={style.filter}>
-            {categories === 0 ?
+            {categories.length === 0 ?
                 Array.from({ length: 8 }).map((_, index) => (
                     <div className={style.filterTagBack} key={index}>
                         <img src={filterbgimg} alt="bg-img" />
