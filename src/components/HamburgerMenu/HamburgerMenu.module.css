@@ -28,11 +28,11 @@
     display: none;
 }
 
-@media screen and (max-width:750px) {
+@media screen and (max-width:550px) {
 
     .hamburgerMenu {
         width: 100%;
-        bottom: -380%;
+        bottom: -375%;
         padding: 1rem 0;
     }
 
@@ -50,8 +50,12 @@
         font-size: 1.05rem;
     }
 
-    .menuProfile .menuProfileLogout,
+    .menuProfileLogout,
     .registerloginbtn .rowItem {
+        display: none;
+    }
+
+    .menuProfileLogout button {
         display: none;
     }
 

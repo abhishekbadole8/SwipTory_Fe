@@ -54,5 +54,11 @@
         padding: .45rem .75rem;
         border-radius: 11px;
     }
+}
 
+@media screen and (max-width:550px){
+    
+    .registerloginbtn .rowItem{
+        display: none;
+    }
 }
